@@ -1,0 +1,69 @@
+/**
+ * Script de Google que entrega tu hoja a la web (versión de ejemplo, escrita desde cero).
+ *
+ * Cómo funciona: la web hace un POST a https://script.google.com/macros/s/<ID de implementación>/exec con un cuerpo JSON
+ *   { "k": "<tu clave>" }                → responde { "ok": true, "xlsx": "<la hoja entera en .xlsx, en base64>" }
+ *   { "k": "<tu clave>", "q": "informe" } → responde { "ok": true, "ix": <indice.json del calendario> }   (opcional)
+ * Con una clave que no coincide responde { "ok": false, "error": "clave" } y la web pide la clave de nuevo.
+ *
+ * NUNCA subas este archivo a GitHub con la clave puesta. La clave y el ID de implementación se meten en la web una vez
+ * (enlace personal o formulario) y se guardan solo en ese dispositivo.
+ *
+ * Instalación:
+ *  1. En tu hoja de Google: Extensiones → Apps Script. Pega este código en Code.gs.
+ *  2. Rellena HOJA_ID (el ID de tu hoja, lo que va entre /d/ y /edit en su dirección) y SECRETO (una clave larga y aleatoria,
+ *     por ejemplo 40 letras y números; no la reutilices de nada). CARPETA_CALENDARIO es opcional.
+ *  3. Implementar → Nueva implementación → Tipo: Aplicación web · Ejecutar como: Yo · Quién tiene acceso: Cualquier usuario.
+ *     Autoriza los permisos que pide (leer tu hoja, conectarse a Google para exportarla y, si usas el calendario, Drive).
+ *  4. Copia el «ID de implementación» (empieza por AKfy). Con él y tu clave abres la web la primera vez:
+ *        https://<tu-usuario>.github.io/<tu-repo>/#d=<ID de implementación>&k=<SECRETO>
+ *     La web guarda los dos en el dispositivo y borra el enlace de la barra. En el iPhone, desde la app de la pantalla de
+ *     inicio, se pegan en el formulario que aparece.
+ *  5. Cada vez que cambies este código: Implementar → Gestionar implementaciones → Editar → Versión: Nueva versión
+ *     (si no, sigue funcionando el código antiguo).
+ */
+const HOJA_ID = 'PON_AQUI_EL_ID_DE_TU_HOJA';
+const SECRETO = 'PON_AQUI_UN_SECRETO_LARGO_Y_ALEATORIO';
+const CARPETA_CALENDARIO = '';   // opcional: ID de la carpeta de Drive donde la tarea semanal deja AAAA-MM-DD/indice.json
+
+function doPost(e) {
+  let pide = {};
+  try { pide = JSON.parse((e && e.postData && e.postData.contents) || '{}'); } catch (err) {}
+  if (!pide.k || !iguales_(String(pide.k), SECRETO)) return json_({ ok: false, error: 'clave' });
+  try {
+    if (pide.q === 'informe') return json_(informe_());
+    return json_({ ok: true, xlsx: hojaEnXlsx_() });
+  } catch (err) {
+    return json_({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+// la hoja entera exportada como .xlsx (con los valores ya calculados por Google), en base64
+function hojaEnXlsx_() {
+  SpreadsheetApp.openById(HOJA_ID);   // obliga a pedir permiso sobre la hoja
+  const url = 'https://docs.google.com/spreadsheets/d/' + HOJA_ID + '/export?format=xlsx';
+  const r = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() }, muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) throw new Error('No he podido exportar la hoja (código ' + r.getResponseCode() + ')');
+  return Utilities.base64Encode(r.getBlob().getBytes());
+}
+
+// calendario (opcional): el indice.json de la semana más reciente. Sin carpeta configurada, la web dice que aún no llega nada.
+function informe_() {
+  if (!CARPETA_CALENDARIO) return { ok: true };   // sin «ix»: la web entiende que este script no entrega calendario
+  const semanas = [];
+  const it = DriveApp.getFolderById(CARPETA_CALENDARIO).getFolders();
+  while (it.hasNext()) { const f = it.next(); if (/^\d{4}-\d{2}-\d{2}$/.test(f.getName())) semanas.push(f); }
+  semanas.sort((a, b) => b.getName().localeCompare(a.getName()));
+  for (const s of semanas.slice(0, 3)) {
+    const fs = s.getFilesByName('indice.json');
+    if (fs.hasNext()) return { ok: true, ix: JSON.parse(fs.next().getBlob().getDataAsString('UTF-8')), emp: {} };
+  }
+  return { ok: true, ix: null };
+}
+
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+// comparación que tarda lo mismo acierte o falle (para no dar pistas sobre la clave)
+function iguales_(a, b) { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; }
+
+// para probar desde el editor (Ejecutar → probar): debe escribir el tamaño del .xlsx
+function probar() { Logger.log('xlsx en base64: ' + hojaEnXlsx_().length + ' caracteres'); }

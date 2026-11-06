@@ -1,0 +1,16 @@
+{
+  "semana": "2026-11-02",
+  "generado": "2026-11-02T08:00:00+01:00",
+  "tipo": "calendario",
+  "empresas": [
+    { "ticker": "NYSE:KO", "nombre": "Coca-Cola",
+      "ultimos":  { "fecha": "2026-10-21", "periodo": "3T 2026" },
+      "proximos": { "fecha": "2027-02-10", "periodo": "4T 2026", "estado": "estimada", "hora": "" } },
+    { "ticker": "AMS:ASML", "nombre": "ASML",
+      "ultimos":  { "fecha": "2026-10-14", "periodo": "3T 2026" },
+      "proximos": { "fecha": "2027-01-20", "periodo": "4T 2026", "estado": "confirmada", "hora": "antes de la apertura" } },
+    { "ticker": "NASDAQ:MSFT", "nombre": "Microsoft",
+      "ultimos":  { "fecha": "2026-10-28", "periodo": "1T 2027 (fiscal)" },
+      "proximos": { "fecha": "2027-01-27", "periodo": "2T 2027 (fiscal)", "estado": "estimada", "hora": "tras el cierre" } }
+  ]
+}
