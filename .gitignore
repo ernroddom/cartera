@@ -1,0 +1,8 @@
+mi-hoja/*
+!mi-hoja/LEEME.txt
+*.gs
+appsscript.json
+.env
+*.xlsx
+!plantilla/hoja-ejemplo.xlsx
+capturas/
