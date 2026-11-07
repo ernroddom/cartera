@@ -25,11 +25,19 @@ cab="\n".join(['<!DOCTYPE html>','<html lang="es">','<meta charset="utf-8">',
  '<meta name="theme-color" content="#0F0F0E" media="(prefers-color-scheme: dark)">',
  '<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">',
  '<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">',
- '<link rel="apple-touch-icon" href="apple-touch-icon.png">'])+"\n"
+ '<link rel="apple-touch-icon" href="apple-touch-icon.png">',
+ '<link rel="manifest" href="manifest.webmanifest">'])+"\n"
 t=cab+src
 open(os.path.join(OUT,"version.txt"),"w").write(m.group(1)+"\n")
 shutil.copy(os.path.join(F,"icono","apple-touch-icon-180.png"),os.path.join(OUT,"apple-touch-icon.png"))
 for f in ("favicon-32.png","favicon-64.png"): shutil.copy(os.path.join(F,"icono",f),os.path.join(OUT,f))
+# Android: con el manifiesto, la web añadida a la pantalla de inicio se abre a pantalla completa, con su nombre e icono
+for f in ("icon-192.png","icon-512.png"): shutil.copy(os.path.join(F,"icono",f),os.path.join(OUT,f))
+import json
+open(os.path.join(OUT,"manifest.webmanifest"),"w",encoding="utf-8").write(json.dumps({
+ "name":NOMBRE,"short_name":NOMBRE,"start_url":"./","scope":"./","display":"standalone",
+ "background_color":"#E4E2DC","theme_color":"#E4E2DC","lang":"es",
+ "icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png"}]},ensure_ascii=False,indent=1))
 for sub,pat in (("logos","*.webp"),("fonts","*.woff2"),("lib","*.js")):
     d=os.path.join(OUT,sub); shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
     origen={"fonts":"fuentes"}.get(sub,sub)
