@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-OooPRAuj6Vj6m1QL6IEntDMOHBfHCtSrUMca5COyR9U=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-9mmsWuHJAroHm7LJ1RLwu7mGozKn3PQqLKjyTzxexU0=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3503,7 +3503,7 @@ function parseVal(g){
 }
 
 // el bróker con su nombre completo (en la hoja, «IB»)
-const nombreBroker=v=>{ const t=String(v??"").trim(); return /^ib$/i.test(t)?"Interactive Brokers":/^degiro$/i.test(t)?"DeGiro":t; };
+const nombreBroker=v=>{ const t=String(v??"").trim(); return /^ib$/i.test(t)?"Interactive Brokers":t; };
 function parse(wb){
   const D = grid(wb,"Dashboard"), C = grid(wb,"Cartera"), V = grid(wb,"Valor Mensual"),
         T = grid(wb,"Trayectoria"), P = grid(wb,"Preselección"), TX = grid(wb,"Transacciones");
@@ -3511,21 +3511,14 @@ function parse(wb){
 
   // KPIs
   const kv = l => below(D,l,1), ks = l => below(D,l,3);
-  out.kpi = { value:kv("Valor de cartera"), ret:kv("Retorno total"), retSub:ks("Retorno total"), today:kv("Hoy")??kv("Variación hoy"),
+  out.kpi = { value:kv("Valor de cartera"), ret:kv("Retorno total"), retSub:ks("Retorno total"), today:kv("Hoy"),
     tir:kv("TIR anualizada"), vsIdx:kv("Frente al MSCI World"),
     rentas:kv("Rentas próximo año"), rentasSub:ks("Rentas próximo año"), npos:ks("Valor de cartera"),
     liquidez:rightNum(D,"Liquidez"), liqSub:(()=>{const p=find(D,"Liquidez"); return p?celda(D,p[0]+1,p[1]):null;})(),
-    aport:(v=>isNum(v)&&v<0?-v:v)(rightNum(D,"Aportaciones")) };
+    aport:rightNum(D,"Aportaciones") };
 
   // Posiciones
-  let [hr,hm] = headerRow(C,["Empresa","Ticker","Valor"]);
-  if(hr<0){ [hr,hm] = headerRow(C,["Precio","Valor","Acc.","Invertido"]);
-    if(hr>=0){ const row=C[hr+1]||[], tc=row.findIndex(v=>typeof v==="string"&&/^[A-Z]{2,7}:[A-Z0-9.]+$/.test(v.trim()));
-      const nm=c=>typeof row[c]==="string"&&row[c].trim()&&c!==tc;
-      if(tc>=0){ hm={...hm, Ticker:[tc], Empresa:[nm(tc+1)?tc+1:tc-1]}; } else hr=-1; } }
-  // títulos de esta hoja con otro nombre (el primero que exista)
-  { const AL={"Hoy":["Var. %"],"Revaloriz.":["Rent."],"Total":["Rent. Tot."],"Total €":["Abs. Tot."],"TIR":["IRR Tot."],"Cobrado":["Totales"]};
-    Object.entries(AL).forEach(([k,as])=>{ if(!hm[k]){ const a=as.find(x=>hm[x]); if(a) hm[k]=hm[a]; } }); }
+  const [hr,hm] = headerRow(C,["Empresa","Ticker","Valor"]);
   const col = k => { // con celdas combinadas el dato puede caer a la derecha de su cabecera
     const c0=(hm[k]||[])[0]; if(c0==null) return undefined;
     for(let c=c0;c<c0+4;c++){ const v=celda(C,hr+1,c); if(v!=null&&v!=="") return c; if(c>c0&&Object.values(hm).some(a=>a.includes(c))) break; }
@@ -3588,9 +3581,7 @@ function parse(wb){
   { const p=find(V,"MSCI World"); if(p){ const row=V[p[0]]; let fc=-1; for(let c=p[1];c>=0;c--) if(norm(row[c])==="FECHA"){fc=c;break;}
       const hm2=headerMap(row); const vc=(hm2["Valor Cartera"]||[]).find(c=>c>fc), ac=(hm2["Aportaciones"]||[]).find(c=>c>fc);
       for(let r=p[0]+1;r<V.length;r++){ const d=celda(V,r,fc); if(!(d instanceof Date)) break; const v=celda(V,r,vc); if(!isNum(v)) break;
-        out.evo.push({d, v, a:celda(V,r,ac), i:celda(V,r,p[1])}); } }
-    else { const [h,m]=headerRow(V,["Fecha","Valor Cartera","Aportaciones"]); if(h>=0){ const fc=m["Fecha"][0], vc=m["Valor Cartera"].find(c=>c>fc), ac=m["Aportaciones"].find(c=>c>fc);
-      for(let r=h+1;r<V.length;r++){ const d=celda(V,r,fc); if(!(d instanceof Date)) break; const v=celda(V,r,vc); if(!isNum(v)) break; out.evo.push({d, v, a:celda(V,r,ac), i:null}); } } } }
+        out.evo.push({d, v, a:celda(V,r,ac), i:celda(V,r,p[1])}); } } }
 
   // Dividendos
   const dv = re => { for(let r=0;r<D.length;r++) for(let c=0;c<(D[r]||[]).length;c++){ const s=D[r][c]; if(typeof s==="string"&&re.test(s.trim())&&isNum(celda(D,r+1,c))) return {label:s.trim(),v:celda(D,r+1,c)}; } return null; };
@@ -3607,18 +3598,16 @@ function parse(wb){
   for(let r=0;r<D.length;r++) for(let c=0;c<(D[r]||[]).length;c++){ const s=D[r][c]; if(typeof s==="string"&&/^Aportaciones \d{4}$/.test(s)&&isNum(celda(D,r+1,c))) out.stats.unshift({l:s,v:celda(D,r+1,c)}); }
 
   // Trayectoria
-  out.tray = []; { let [tr,tm]=headerRow(T,["Año","Aportación","Acumulado","Valor final"]);
-    if(tr<0){ [tr,tm]=headerRow(T,["Año","Anual","Acumulado","Valor final"]); if(tr>=0) tm={...tm, "Aportación":tm["Anual"], "Neto mes":tm["Neto mes"]||tm["Neto"]}; }
-    if(tr>=0){ const tc=k=>(tm[k]||[])[0];
+  out.tray = []; { const [tr,tm]=headerRow(T,["Año","Aportación","Acumulado","Valor final"]); if(tr>=0){ const tc=k=>(tm[k]||[])[0];
     for(let r=tr+1;r<T.length;r++){ const y=celda(T,r,tc("Año")); if(!isNum(y)) break;
       out.tray.push({y, age:celda(T,r,tc("Edad")), acc:celda(T,r,tc("Acumulado")), val:celda(T,r,tc("Valor final")), divs:celda(T,r,tc("Dividendos")), net:celda(T,r,tc("Neto mes")), tir:celda(T,r,tc("TIR"))}); } } }
   out.curYear = rightNum(T,"Año en curso") || new Date().getFullYear();
   out.horizon = { title:(()=>{ for(const row of T) for(const v of row||[]) if(typeof v==="string"&&/^H O R I Z O N T E/.test(v)) return v.split(/\s{2,}/).map(w=>w.replace(/\s/g,"")).filter(w=>w&&w!=="·").map(w=>w[0]+w.slice(1).toLowerCase()).join(" "); return null; })(),
-    age:rightNum(T,"Edad",3)??(b=>isNum(b)?(rightNum(T,"Año en curso")||new Date().getFullYear())-b:null)(rightNum(T,"Año nacimiento",3)), wealth:rightNum(T,"Patrimonio",3), contributed:rightNum(T,"Aportado",3), monthly:rightNum(T,"Neto mensual",3),
-    saving:rightNum(T,"Ahorro anual",3)??rightNum(T,"Ahorros anuales",3), growth:rightNum(T,"Crecimiento anual",3)??rightNum(T,"Crecimiento",3), dy:rightNum(T,"Rentabilidad por dividendo",3)??rightNum(T,"Dividend yield",3),
+    age:rightNum(T,"Edad",3), wealth:rightNum(T,"Patrimonio",3), contributed:rightNum(T,"Aportado",3), monthly:rightNum(T,"Neto mensual",3),
+    saving:rightNum(T,"Ahorro anual",3), growth:rightNum(T,"Crecimiento anual",3), dy:rightNum(T,"Rentabilidad por dividendo",3),
     divUntil:rightNum(T,"Dividendos apuntados hasta",3), stop:rightNum(T,"Sin reinvertir desde",3),   // 0 = nunca; sin la casilla, como antes: no se reinvierte
     // tramos de impuestos de tu hoja (Desde · Tipo)
-    tax:(()=>{ const p=find(T,"Desde"), o=[]; if(p) for(let r=p[0]+1;r<p[0]+12;r++){ const c=celda(T,r,p[1]), k=[1,2,3].map(i=>celda(T,r,p[1]+i)).find(isNum); if(!isNum(c)||!isNum(k)) break; o.push([c,k]); } return o; })() };
+    tax:(()=>{ const p=find(T,"Desde"), o=[]; if(p) for(let r=p[0]+1;r<p[0]+12;r++){ const c=celda(T,r,p[1]), k=celda(T,r,p[1]+1); if(!isNum(c)||!isNum(k)) break; o.push([c,k]); } return o; })() };
 
   return out;
 }
@@ -3849,7 +3838,7 @@ function trayProj(s){ const T=DATA.tray, h=DATA.horizon, cur=DATA.curYear, until
     const p=out[i-1], ini=p&&isNum(p.val)?p.val:0, g=r.y<=until&&isNum(r.divs)?r.divs:ini*s.dy, k=tax(g), re=s.stop===0||r.y<s.stop, val=ini*(1+s.growth)+s.saving+(re?g*(1-k):0);
     out.push({y:r.y, age:r.age, acc:(p&&isNum(p.acc)?p.acc:0)+s.saving, val, divs:g, net:g/12*(1-k), ti:ini?(val-s.saving)/ini-1:null, re}); });
   return out; }
-const VER="v426";   // la versión publicada, en el pie
+const VER="v425";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
