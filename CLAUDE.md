@@ -59,3 +59,23 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
 - Funciona en PC, en el móvil (añadida a la pantalla de inicio se comporta como una app) y también dentro de Claude.
 
 <!-- Notas de la hoja de este usuario (rellénalas al terminar): -->
+
+### Notas de la hoja de este usuario (sesión de noviembre de 2026)
+- **Formato:** su hoja («Cartera», en su Google personal) tiene **el mismo formato que la hoja original**: la web funciona sin
+  adaptar `parse()`. Ojo: un Excel descargado de una versión antigua de su hoja traía otro formato; si algo no cuadra, pide
+  primero una descarga reciente.
+- **Código:** igual que el del amigo salvo el manifiesto de Android (`construir.py` genera `manifest.webmanifest` y copia
+  `icon-192.png`/`icon-512.png`). Versión publicada: v426.
+- **Publicación:** GitHub Pages sirve la rama **`gh-pages`**, que solo lleva el contenido de `web/` (+ `.nojekyll`). Tras cada
+  `construir.py`, copia `web/` a esa rama, comprueba que no hay `AKfy…` y súbela. `main` lleva el paquete completo.
+- **Script:** creado por él en su hoja con `Code.gs.ejemplo`. La copia de la hoja arrastró el script del amigo (`puerta.gs`) y su
+  `appsscript.json` sin permiso de hojas de cálculo: se borró y se pusieron los permisos `spreadsheets`,
+  `script.external_request` y `drive.readonly`. Nunca pidas ni guardes su ID ni su clave.
+- **Arreglos hechos en su hoja (con su permiso):** formato de fecha en 4 dividendos futuros; Kraft Heinz como `NASDAQ:KHC` en
+  Transacciones; «Cobrado» (Cartera, col. AE) reparte los dividendos según las acciones que conserva hoy, como la web;
+  Vidrala 12/11/2025 = ampliación liberada (Div/Acc 0).
+- **Diferencia aceptada:** «TradeRepublic Remunerada» (cuenta remunerada apuntada como lote con venta a 31/12 del año): el
+  cuadre avisa de fecha futura; el usuario quiere dejarlo así.
+- **Pendiente:** poner el bróker en cada aportación (ahora casi todas van a «Otros» en la liquidez por bróker) y escribir
+  siempre «DeGiro»; cambiar el icono (aún es el del amigo).
+- **Idea para otra sesión:** su hermano podría usar la misma web con su propia hoja (mismo formato) y su propio script y clave.
