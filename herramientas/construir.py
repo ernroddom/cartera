@@ -11,9 +11,11 @@
 #  6. Comprueba que no se cuela ningún ID de script (AKfy…), ni archivos .gs / appsscript.json.
 import os, re, sys, shutil, hashlib, base64, glob
 R=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),".."))
-F=os.path.join(R,"fuente"); OUT=os.path.join(R,"web")
+F=os.path.join(R,"fuente")
+# HTML y SALIDA permiten construir otra versión (p. ej. la del hermano) con los mismos logos, fuentes e iconos
+OUT=os.path.abspath(os.environ.get("SALIDA",os.path.join(R,"web"))); HTML=os.environ.get("HTML",os.path.join(F,"cartera.html"))
 NOMBRE=os.environ.get("NOMBRE_APP","Cartera")   # el nombre bajo el icono en la pantalla de inicio del móvil
-src=open(os.path.join(F,"cartera.html"),encoding="utf-8").read()
+src=open(HTML,encoding="utf-8").read()
 m=re.search(r'VER="(v\d+)"',src); assert m, "falta VER=\"vNNN\" en cartera.html"
 os.makedirs(OUT,exist_ok=True)
 cab="\n".join(['<!DOCTYPE html>','<html lang="es">','<meta charset="utf-8">',
