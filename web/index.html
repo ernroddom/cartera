@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-7gQagEMHctW3lvRbU+1Mk2wVlD8e78oZ/r5atr702XA=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-AHjC4opBPhJVOZq95nOaoK3dZzMoMPE/HqHXPCFtQpo=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3297,6 +3297,42 @@ html.lmono[data-theme="dark"] .zf-e .lgb:not(.gr) img{filter:brightness(0) inver
 @media (max-width:700.98px){ .zcm{grid-template-columns:1fr;gap:28px} .zcd{min-height:52px;padding:4px 3px} .zcl{margin-top:10px} .zcl .lgb{height:16px}
   .zcl .lgb+.lgb,.zcl em.e2{display:none} .zcl em.e1{display:inline} .zcl .lgb,.zcl:has(.e2) .lgb{width:62%} .zf-g{grid-template-columns:1fr;gap:20px} }
 
+/* v437 · Universo: frase con dos mosaicos y «rinden más de lo que les exiges» */
+#s-uni{display:none!important}
+.ztm{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ztm-h{margin:0 0 8px;font-size:var(--fs-12);font-weight:600;color:var(--ink)}
+.ztm-b{position:relative;width:100%}
+.ztmc{position:absolute;box-sizing:border-box;border:2px solid var(--band);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:2px;overflow:hidden;font:inherit;cursor:pointer;color:var(--ink);min-width:0}
+.ztmc .zl{display:flex;justify-content:center;width:70%;height:24px} .ztmc .zl .lgb{width:100%;max-width:90px;height:100%} .ztmc .zl img{transform:none!important}
+.ztmc .zp{font-size:var(--fs-10);color:var(--ink2)}
+.ztmc.sm .zl{height:16px} .ztmc.xs .zp{display:none} .ztmc.xs .zl{height:12px}
+.ztmc:hover{filter:brightness(.96)}
+.ztm-pf{position:absolute;right:5px;top:5px;width:5px;height:5px;border-radius:50%;background:var(--ink)}
+.ztmc.p1{background:var(--lp1)}.ztmc.p2{background:var(--lp2)}.ztmc.p3{background:var(--lp3)}.ztmc.p4{background:var(--lp4)}.ztmc.p5{background:var(--lp5)}
+.ztmc.n1{background:var(--ln1)}.ztmc.n2{background:var(--ln2)}.ztmc.n3{background:var(--ln3)}.ztmc.n4{background:var(--ln4)}.ztmc.n5{background:var(--ln5)}
+html.lmono .ztmc .lgb:not(.gr) img{filter:brightness(0) opacity(.82)} html.lmono :is(.ztmc,.zdl,.zcl,.zf-e) .lgb.gr img{filter:grayscale(1) brightness(.8)}
+@media (prefers-color-scheme:dark){html.lmono:not([data-theme="light"]) :is(.ztmc,.zdl,.zcl,.zf-e) .lgb.gr img{filter:grayscale(1) brightness(1.15)}}
+html.lmono[data-theme="dark"] :is(.ztmc,.zdl,.zcl,.zf-e) .lgb.gr img{filter:grayscale(1) brightness(1.15)}
+@media (prefers-color-scheme:dark){html.lmono:not([data-theme="light"]) .ztmc .lgb:not(.gr) img{filter:brightness(0) invert(.86)}}
+html.lmono[data-theme="dark"] .ztmc .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
+.ztm-0{color:var(--ink3);font-size:var(--fs-12)}
+.zexi .zh2{margin-bottom:26px}
+.zsw{position:relative;padding:0 0 46px 44px}
+.zsy{position:absolute;left:0;top:0;height:var(--hp);width:36px} .zsy span{position:absolute;right:0;transform:translateY(-50%);font-size:var(--fs-10);color:var(--ink3)}
+.zsg{display:flex;gap:14px;height:var(--hp)}
+.zsc{position:relative;flex:1 1 0;min-width:0}
+.zsa{position:absolute;left:0;right:0;top:0;background:color-mix(in srgb,var(--mint) 22%,transparent);border-bottom:1.5px solid color-mix(in srgb,var(--ink) 55%,transparent)}
+.zdot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--g4)}
+.zdot.ok{background:var(--mint)} .zdot.pf{background:var(--bar-dark)} .zdot.ok.in{box-shadow:0 0 0 1.5px var(--bar-dark)}
+.zdot:hover{transform:scale(1.5)}
+.zdl{position:absolute;transform:translateY(-50%);height:20px;width:64px;display:flex;align-items:center;pointer-events:none} .zdl .lgb{width:100%;height:18px;justify-content:flex-start} .zdl .lgb img{object-position:left center;transform:none!important} .zdl.izq{transform:translate(-100%,-50%)} .zdl.izq .lgb{justify-content:flex-end} .zdl.izq .lgb img{object-position:right center}
+.zsx{position:absolute;left:0;right:0;top:calc(100% + 10px);text-align:center;font-size:var(--fs-11);font-weight:600;color:var(--ink)} .zsx small{display:block;font-weight:400;font-size:var(--fs-10);color:var(--ink3)}
+.zsl{display:flex;flex-wrap:wrap;gap:6px 18px;margin:56px 0 0;font-size:var(--fs-11);color:var(--ink3)} .zsl i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--g4)} .zsl i.ok{background:var(--mint)} .zsl i.pf{background:var(--bar-dark)} .zsl i.in{box-shadow:0 0 0 1.5px var(--bar-dark)}
+html.lmono .zdl .lgb:not(.gr) img{filter:brightness(0) opacity(.82)}
+@media (prefers-color-scheme:dark){html.lmono:not([data-theme="light"]) .zdl .lgb:not(.gr) img{filter:brightness(0) invert(.86)}}
+html.lmono[data-theme="dark"] .zdl .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
+@media (max-width:700.98px){ .ztm{grid-template-columns:1fr;gap:16px} .zsw{padding-left:34px} .zsy{width:28px} .zsg{gap:6px} .zdot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px} .zdl{width:44px;height:16px} .zdl .lgb{height:14px} }
+
 </style>
 
 <div class="wrap">
@@ -3447,6 +3483,8 @@ html.lmono[data-theme="dark"] .zf-e .lgb:not(.gr) img{filter:brightness(0) inver
 
   <!-- Universo -->
   <div class="view" id="v-preseleccion" hidden>
+  <section class="zband" id="s-uh" aria-label="Cómo se mueve tu Universo"><h1 class="zh" id="uh-h"></h1><div class="ztm" id="uh-t"></div></section>
+  <section class="panel zexi" id="s-ue" aria-label="Lo que rinden frente a lo que exiges"><h2 class="zh zh2" id="ue-h"></h2><div class="zsw" id="ue-c"></div></section>
   <section class="panel hero3 band2" id="s-uni">
     <div class="bg ug bg5" id="p-k"></div>
   </section>
@@ -4031,7 +4069,7 @@ function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) retu
   C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
 document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
 alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
-const VER="v436";   // la versión publicada, en el pie
+const VER="v437";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
@@ -4860,6 +4898,7 @@ function renderPerf(){
   $("perf-up").innerHTML=!rs.length?nada(!DATA.pre.length?"Sin empresas en tu hoja":perfK==="today"?"Ningún mercado abierto todavía":"Sin datos para este periodo"):up.length?up.map(r=>pfRow(r,max)).join(""):nada("Ninguna empresa sube");
   $("perf-dn").innerHTML=!rs.length?"":dn.length?dn.map(r=>pfRow(r,maxD)).join(""):nada("Ninguna empresa baja");
   pfMas();
+  renderUh();
   // por industria: media simple de sus empresas, como tu hoja Radar; color por tercios del mejor y del peor, igual que allí
   const g={}; DATA.pre.forEach(r=>{ if(!r.ind) return; (g[r.ind]=g[r.ind]||[]); if(isNum(r[perfK])) g[r.ind].push(r[perfK]); });
   const L=Object.entries(g).map(([k,v])=>({k,v:v.length?sum(v,x=>x)/v.length:null})).sort((a,b)=>(b.v??-1e9)-(a.v??-1e9));
@@ -4895,6 +4934,50 @@ if(window.ResizeObserver) new ResizeObserver(()=>{ const w=$("perf-ind").clientW
 // al pulsar una industria, la tabla de abajo se filtra por ella
 $("perf-ind").addEventListener("click",e=>{ const b=e.target.closest("[data-ind]"); if(!b) return; $("p-ind").value=b.dataset.ind; $("p-ftg").closest(".toolbar").classList.add("open"); $("p-ftg").setAttribute("aria-expanded",true); renderPre(); });
 const setPerf=k=>{ perfK=k; perfAuto=false; renderPerf(); };
+// v437 · Universo: la frase («Hoy ▾ suben 35 de 117 empresas y bajan 14») con dos mosaicos (suben y bajan, del tamaño de lo que se
+// mueven) y «N de N rinden más de lo que les exiges»: cada empresa, un punto, en la columna de lo que le exiges
+const UH_P=[["today","Hoy"],["last","En la última sesión"],["w1","En una semana"],["m1","En un mes"],["m3","En tres meses"],["m6","En seis meses"],["ytd","En el año"],["y1","En un año"],["y3","En tres años"]];
+// mosaico «squarified»: rectángulos lo más cuadrados posible, en un lienzo de ancho «a» y alto 1; devuelve % de cada uno
+function zTreemap(vals,a){ const tot=sum(vals,v=>v)||1, out=[]; let x=0,y=0,w=a,h=1, items=vals.map((v,i)=>({i,v:v/tot*a})), row=[];
+  const worst=(r,l)=>{ const s=sum(r,o=>o.v), mx=Math.max(...r.map(o=>o.v)), mn=Math.min(...r.map(o=>o.v)); return Math.max(l*l*mx/(s*s),(s*s)/(l*l*mn)); };
+  const lay=r=>{ const s=sum(r,o=>o.v); if(w>=h){ const cw=s/h; let yy=y; r.forEach(o=>{ const ch=o.v/cw; out[o.i]={x,y:yy,w:cw,h:ch}; yy+=ch; }); x+=cw; w-=cw; } else { const ch=s/w; let xx=x; r.forEach(o=>{ const cw=o.v/ch; out[o.i]={x:xx,y,w:cw,h:ch}; xx+=cw; }); y+=ch; h-=ch; } };
+  while(items.length){ const o=items[0], l=Math.min(w,h); if(!row.length||worst(row.concat(o),l)<=worst(row,l)){ row.push(o); items.shift(); } else { lay(row); row=[]; } }
+  if(row.length) lay(row); return out.map(r=>({l:r.x/a*100,t:r.y*100,w:r.w/a*100,h:r.h*100,ar:r.w*r.h/a})); }
+function renderUh(){ const d=DATA, H=$("uh-h"), T=$("uh-t"); if(!d||!H||!T) return;
+  const k=UH_P.some(x=>x[0]===perfK)?perfK:"last", all=d.pre, rs=all.filter(r=>isNum(r[k])), up=rs.filter(r=>r[k]>=0.0005).sort((a,b)=>b[k]-a[k]), dn=rs.filter(r=>r[k]<=-0.0005).sort((a,b)=>a[k]-b[k]);
+  const closed=lastSession().closed, sel=`<span class="zsel"><span class="zsel-t">${esc(UH_P.find(x=>x[0]===k)[1])}${zChev}</span><select id="uh-sel" aria-label="Periodo">${UH_P.map(([v,l])=>`<option value="${v}"${v===k?" selected":""}${v==="today"&&closed?" disabled":""}>${esc(l)}</option>`).join("")}</select></span>`;
+  const n0=v=>nf(0).format(v), pc=v=>pct(v,1,true);
+  H.innerHTML=`${sel} ${rs.length?`suben ${n0(up.length)} de ${n0(all.length)} empresas y bajan ${n0(dn.length)}.`:"no hay datos de tus empresas."}${up.length||dn.length?`<span class="zs">${up.length?`Arriba, ${esc(up[0].name)} (${pc(up[0][k])})`:""}${up.length&&dn.length?"; abajo, ":dn.length?"Abajo, ":""}${dn.length?`${esc(dn[0].name)} (${pc(dn[0][k])})`:""}.</span>`:""}`;
+  const narrow=matchMedia("(max-width:700.98px)").matches, A=narrow?1.7:1.75, MAXN=narrow?18:26;
+  const mosaico=(l,neg)=>{ const L=l.slice(0,MAXN); if(!L.length) return `<p class="ztm-0">${neg?"Ninguna baja":"Ninguna sube"}</p>`;
+    const mx=Math.abs(L[0][k])||1, R=zTreemap(L.map(r=>Math.abs(r[k])),A);
+    return `<div class="ztm-b" style="aspect-ratio:${A}">${L.map((r,i)=>{ const q=R[i], lv=Math.min(5,1+Math.floor(Math.abs(r[k])/mx*4.999)), sm=q.ar<(narrow?0.022:0.012), xs=q.ar<(narrow?0.01:0.005);
+      return `<button type="button" class="ztmc ${neg?"n":"p"}${lv}${sm?" sm":""}${xs?" xs":""}" data-t="${esc(r.ticker)}" style="left:${q.l.toFixed(3)}%;top:${q.t.toFixed(3)}%;width:${q.w.toFixed(3)}%;height:${q.h.toFixed(3)}%" title="${esc(r.name)} · ${pc(r[k])}${r.inPf?" · en cartera":""}">${r.inPf?`<i class="ztm-pf"></i>`:""}<span class="zl">${logoBare(r.name,r.ticker)}</span><span class="zp num">${pc(r[k])}</span></button>`; }).join("")}</div>`; };
+  T.innerHTML=`<div><h3 class="ztm-h">Suben</h3>${mosaico(up,false)}</div><div><h3 class="ztm-h">Bajan</h3>${mosaico(dn,true)}</div>`;
+  renderUe(); }
+function renderUe(){ const d=DATA, H=$("ue-h"), C=$("ue-c"); if(!d||!H||!C) return;
+  const all=d.pre, rs=all.filter(r=>isNum(r.irrExp)&&isNum(r.req)), ok=rs.filter(r=>r.margin>0).sort((a,b)=>b.margin-a.margin), n0=v=>nf(0).format(v), rv=all.filter(stale).length;
+  $("s-ue").hidden=!rs.length; if(!rs.length) return;
+  const top=ok.slice(0,3).map(r=>esc(r.name)), lista=top.length>1?top.slice(0,-1).join(", ")+" y "+top[top.length-1]:top[0]||"";
+  H.innerHTML=`${n0(ok.length)} de ${n0(rs.length)} rinden más de lo que les exiges.<span class="zs">${ok.length?`${ok.length===1?"La que más":"Las que más"}: ${lista}.`:"Ninguna, por ahora."}${rv?` ${n0(rv)} por revisar.`:""}</span>`;
+  const reqs=[...new Set(rs.map(r=>Math.round(r.req*1000)/1000))].sort((a,b)=>a-b);
+  let lo=Math.min(0,...rs.map(r=>r.irrExp)), hi=Math.max(...rs.map(r=>r.irrExp),...reqs); lo=Math.floor(lo*10)/10; hi=Math.ceil(hi*10)/10; if(hi-lo<0.2) hi=lo+0.2;
+  const narrow=matchMedia("(max-width:700.98px)").matches, HP=narrow?240:280, R=narrow?3.5:4.5, colW=Math.max(36,((C.clientWidth||Math.min(innerWidth,1180)-(narrow?60:120))-(narrow?34:44))/reqs.length-(narrow?6:14)), yp=v=>(hi-v)/(hi-lo)*100;
+  const ticks=[]; for(let t=lo;t<=hi+1e-9;t+=0.1) ticks.push(Math.round(t*10)/10);
+  const cols=reqs.map((q,qi)=>{ const L=rs.filter(r=>Math.round(r.req*1000)/1000===q).sort((a,b)=>b.irrExp-a.irrExp), placed=[], best=L.find(r=>r.margin>0);
+    L.forEach(r=>{ const y=(hi-r.irrExp)/(hi-lo)*HP; let dx=0; for(let n=0;n<80;n++){ const c=n===0?0:(n%2?1:-1)*Math.ceil(n/2)*(R*2+1.5); if(!placed.some(p=>Math.hypot(p.x-c,p.y-y)<R*2+1)){ dx=c; break; } } placed.push({x:dx,y}); });
+    const mxd=Math.max(0,...placed.map(p=>Math.abs(p.x))), lim=colW/2-R-2, f=mxd>lim?lim/mxd:1;
+    const dots=L.map((r,i)=>{ const dx=placed[i].x*f;
+      const cl=r.margin>0?"ok":r.inPf?"pf":"no";
+      return `<button type="button" class="zdot ${cl}${r.inPf?" in":""}" data-t="${esc(r.ticker)}" style="top:${yp(r.irrExp).toFixed(2)}%;left:calc(50% + ${dx.toFixed(1)}px)" title="${esc(r.name)} · TIR esperada ${pct(r.irrExp,1)} · exiges ${pct(r.req,1)}${r.inPf?" · en cartera":""}"></button>`+(r===best?`<span class="zdl${qi===reqs.length-1&&reqs.length>1?" izq":""}" style="top:${yp(r.irrExp).toFixed(2)}%;left:calc(50% + ${(qi===reqs.length-1&&reqs.length>1?dx-R-8:dx+R+8).toFixed(1)}px)">${logoBare(r.name,r.ticker)}</span>`:""); }).join("");
+    return `<div class="zsc"><div class="zsa" style="height:${yp(q).toFixed(2)}%"></div>${dots}<span class="zsx num">${pct(q,q*1000%10?1:0)}<small>exigida</small></span></div>`; }).join("");
+  C.style.setProperty("--hp",HP+"px");
+  C.innerHTML=`<div class="zsy">${ticks.map(t=>`<span class="num" style="top:${yp(t).toFixed(2)}%">${pct(t,0)}</span>`).join("")}</div><div class="zsg">${cols}</div><p class="zsl"><span><i class="ok"></i>Rinde más de lo que exiges</span><span><i class="ok in"></i>En tu cartera, por encima</span><span><i class="pf"></i>En tu cartera, por debajo</span><span><i class="no"></i>Candidata, por debajo</span></p>`; }
+document.addEventListener("change",e=>{ if(e.target.id==="uh-sel") setPerf(e.target.value); });
+document.addEventListener("click",e=>{ const b=e.target.closest("#uh-t .ztmc[data-t],#ue-c .zdot[data-t]"); if(!b) return; const box=b.closest("#uh-t,#ue-c"), L=[...box.querySelectorAll("[data-t]")].map(x=>x.dataset.t);
+  const r=DATA.pre.find(x=>x.ticker===b.dataset.t); openSheet(r&&r.inPf?"pos":"pre",b.dataset.t,[...new Set(L)]); });
+alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderUh(); });
+
 // «Ver más» de Mejores y Peores: en el PC, uno solo en el centro que abre las dos listas (10 y hasta 20);
 // en el móvil, una lista debajo de otra, cada una con el suyo (5 y hasta 10)
 const pfMovil=matchMedia("(max-width:700.98px)");
