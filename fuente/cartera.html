@@ -1743,21 +1743,21 @@ body{font-feature-settings:"cv11"}
 /* ===== Logos de un solo color en las listas (Posiciones, Movimientos, Dividendos y su tarjeta de «Próximos 12 meses», Radar, Rendimiento, Todas las empresas, Plan y buscador).
    Los logos a color siguen intactos en la página: esto solo los pinta. Para volver al color, poner LOGOS_UN_COLOR=false en el código (o borrar este bloque).
    La ficha, Actualidad y el mapa de Hoy no cambian. Los logos de dos tonos (LOGO_GRIS) van en gris para no perder su dibujo ===== */
-html.lmono :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb:not(.gr) img{filter:brightness(0) opacity(.82)}
-html.lmono :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.gr img{filter:grayscale(1) brightness(.8)}
+html.lmono :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb:not(.gr) img{filter:brightness(0) opacity(.82)}
+html.lmono :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.gr img{filter:grayscale(1) brightness(.8)}
 @media (prefers-color-scheme:dark){
-  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
-  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.fino img{filter:brightness(0) invert(1)}
-  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.gr img{filter:grayscale(1) brightness(1.15)}}
-html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
-html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.fino img{filter:brightness(0) invert(1)}
-html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.gr img{filter:grayscale(1) brightness(1.15)}
+  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
+  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.fino img{filter:brightness(0) invert(1)}
+  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.gr img{filter:grayscale(1) brightness(1.15)}}
+html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
+html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.fino img{filter:brightness(0) invert(1)}
+html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.gr img{filter:grayscale(1) brightness(1.15)}
 /* en oscuro, de un solo color se usa siempre el logo normal: las versiones para fondo oscuro (Starbucks, Pepsi, Danone…) rellenan su dibujo y serían una mancha */
 @media (prefers-color-scheme:dark){
-  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.kv img{display:block}
-  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.kv img.kd{display:none}}
-html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.kv img{display:block}
-html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt) .lgb.kv img.kd{display:none}
+  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.kv img{display:block}
+  html.lmono:not([data-theme="light"]) :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.kv img.kd{display:none}}
+html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.kv img{display:block}
+html.lmono[data-theme="dark"] :is(#pos-body,#m-body,#perf-up,#perf-dn,#p-body,#pl-body,#b-payers,#cal,#pays,#kx-r,.cpopf,#sheet .fp-id,#sh-tt,#ah-g) .lgb.kv img.kd{display:none}
 /* ===== Paleta «marfil» (modo claro): el mismo tono cálido de la hoja, con más luz. Lienzo más claro y bloques casi blancos, rayas más suaves.
    El modo oscuro no cambia. Para volver a la paleta anterior (lienzo #E4E2DC, bloques #F0EEE8), basta con borrar este bloque ===== */
 
@@ -3204,8 +3204,6 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
 .ztile .zp{font-size:var(--fs-10);color:var(--ink3)}
 .zgl{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:var(--fs-11);color:var(--ink2);min-width:0;white-space:nowrap}
 .zgl .zn{min-width:0;overflow:hidden;text-overflow:ellipsis}
-@media (prefers-color-scheme:dark){html:not([data-theme="light"]) #ah-g .lgb.dk img{filter:brightness(0) invert(.86)} html:not([data-theme="light"]) #ah-g .lgb.dk.fino img{filter:brightness(0) invert(1)}}
-html[data-theme="dark"] #ah-g .lgb.dk img{filter:brightness(0) invert(.86)} html[data-theme="dark"] #ah-g .lgb.dk.fino img{filter:brightness(0) invert(1)} .zgl>.num,.zgl .flag{flex:none}
 .zgl .num{color:var(--ink3)} .zgl .flag{width:12px;height:12px}
 #s-aidx{display:none!important}
 /* barras de dividendos por mes */
@@ -3916,7 +3914,7 @@ function renderDvHead(){ const d=DATA, H=$("dv-h"), B=$("dv-b"); if(!d||!H||!B||
   const mx=Math.max(1,...M.map(x=>x.p+x.s));
   B.innerHTML=M.map(x=>{ const y=Math.floor(x.k/12), m=x.k%12, v=x.p+x.s, h=Math.round(v/mx*120), far=x.off<-5||x.off>6?" far":"";
     return `${x.off===0?`<div class="zhoy${far}" aria-hidden="true"><span>hoy</span></div>`:""}<div class="zb1${far}${x.off<0?" ya":""}" title="${MESL[m]} ${y}: ${eur(v)}"><span class="zv num">${v?nf(0).format(Math.round(v)):""}</span><span class="zbar" style="height:${h}px">${x.s?`<i class="sc" style="flex:${x.s}"></i>`:""}${x.p?`<i class="pd" style="flex:${x.p}"></i>`:""}</span><span class="zm">${MES[m].toLowerCase()}</span><span class="zy">${m===0||x.off===-11||x.off===-5?y:""}</span></div>`; }).join(""); }
-const VER="v432";   // la versión publicada, en el pie
+const VER="v433";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
