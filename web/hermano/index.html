@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-7WYtiTzLSiE3zx5TIb/M0W0KBRhyjHg5Cgn1DZabFfQ=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-cLedbCdxvlw3rg3qUfJpDl/osiMpGcIrp87Er+oLlyI=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3180,9 +3180,11 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
 /* v425 · el cartel «Por revisar» no hace más alta la cabecera de «Tu valoración» */
 .fp-ch h4 .vrv{line-height:14px;padding:1px 7px;margin:-1px 0 -1px 8px;vertical-align:1px}
 /* app del hermano: solo Cartera, Aportaciones y Compras */
-#s-check,#chk-show,#hoja-al,#mtabs,#kbtn,.hm5-mv{display:none!important}
+#s-check,#chk-show,#hoja-al,#kbtn{display:none!important}
 /* sin dividendos: fuera la columna de rentabilidad por dividendo */
 #t-pos [data-k="yov"],#t-pos td[data-l="Rent. div."]{display:none!important}
+/* no vende: fuera el resultado de las ventas, el estado, la fecha y el precio de venta */
+#m-state,#s-mov [data-k="pnl"],#s-mov[data-t="transacciones"] :is([data-k="st"],[data-k="sd"],[data-k="sp"]){display:none!important}
 /* Índices */
 #ix-list{display:grid;gap:16px}
 @media (min-width:1000px){#ix-list{grid-template-columns:1fr 1fr}}
@@ -3194,7 +3196,6 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
 #v-indices .ix-0{margin:0;padding:24px 0;color:var(--ink3);font-size:var(--fs-13);text-align:center}
 @media (max-width:700.98px){#v-indices .chart-head{flex-direction:column;align-items:flex-start;gap:10px}}
 body.hm3on #v-indices>#ix-list{margin-top:max(env(safe-area-inset-top,0px),10px)}
-body.hm3on #v-movimientos>#s-mov{margin-top:max(env(safe-area-inset-top,0px),10px)}
 .evo-leg span:nth-child(3){display:none}
 </style>
 
@@ -3202,7 +3203,7 @@ body.hm3on #v-movimientos>#s-mov{margin-top:max(env(safe-area-inset-top,0px),10p
   <header class="top">
     
     <div class="status"><i class="dot busy" id="dot"></i><span id="stat" role="status">Conectando…</span><span id="asof" hidden></span><button class="btn ic" id="refresh" type="button" disabled aria-label="Actualizar" title="Actualizar"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.2v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Actualizar</span></button></div>
-    <nav class="nav" id="nav" aria-label="Secciones"><a href="#resumen" data-v="resumen"><svg class="nav-i nav-logo" viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="229" fill="#1A231E"/><path d="M226 716 L430 512 L566 618 L770 386" fill="none" stroke="#F1EFE9" stroke-width="86" stroke-linecap="round" stroke-linejoin="round"/><circle cx="770" cy="386" r="112" fill="#1A221E"/><circle cx="770" cy="386" r="82" fill="#86D3AA"/></svg><span>Cartera</span></a><a href="#aportaciones" data-v="aportaciones"><svg class="nav-i" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16.5V10M10 16.5V3.5M16 16.5V7.5"/></svg><span>Aportaciones</span></a><a href="#transacciones" data-v="transacciones"><svg class="nav-i" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7.5h12.5l-3-3M16.5 12.5H4l3 3"/></svg><span>Compras</span></a><a href="#indices" data-v="indices"><svg class="nav-i" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M3 10h14M10 3c2.4 2.2 2.4 11.8 0 14M10 3c-2.4 2.2-2.4 11.8 0 14"/></svg><span>Índices</span></a></nav>
+    <nav class="nav" id="nav" aria-label="Secciones"><a href="#resumen" data-v="resumen"><svg class="nav-i nav-logo" viewBox="0 0 1024 1024" aria-hidden="true"><rect width="1024" height="1024" rx="229" fill="#1A231E"/><path d="M226 716 L430 512 L566 618 L770 386" fill="none" stroke="#F1EFE9" stroke-width="86" stroke-linecap="round" stroke-linejoin="round"/><circle cx="770" cy="386" r="112" fill="#1A221E"/><circle cx="770" cy="386" r="82" fill="#86D3AA"/></svg><span>Cartera</span></a><a href="#movimientos" data-v="movimientos"><svg class="nav-i" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7.5h12.5l-3-3M16.5 12.5H4l3 3"/></svg><span>Movimientos</span></a><a href="#indices" data-v="indices"><svg class="nav-i" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M3 10h14M10 3c2.4 2.2 2.4 11.8 0 14M10 3c-2.4 2.2-2.4 11.8 0 14"/></svg><span>Índices</span></a></nav>
     <div class="tools"><button class="btn kbar" id="kbtn" type="button" aria-label="Buscar" aria-haspopup="dialog" aria-expanded="false" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="kb-l">Buscar</span><kbd id="kb-k">⌘K</kbd></button><button class="btn ic sq" id="priv" type="button" aria-pressed="false" aria-label="Ocultar importes" title="Ocultar importes"><svg class="eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8 12.1 12.5 8 12.5 1.5 8 1.5 8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><svg class="eye-x" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.6 5.6C1.9 6.6 1.5 8 1.5 8s2.4 4.5 6.5 4.5c1 0 1.9-.3 2.7-.7M6 3.8c.6-.2 1.3-.3 2-.3 4.1 0 6.5 4.5 6.5 4.5s-.5 1-1.4 2M2.5 2.5l11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="btn ic sq" id="theme" type="button" aria-label="Modo oscuro"><svg class="moon" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><svg class="sun" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><button class="btn ic" id="more" type="button" aria-label="Más opciones" aria-haspopup="menu" aria-expanded="false" aria-controls="more-m"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="8" r="1.35" fill="currentColor"/><circle cx="8" cy="8" r="1.35" fill="currentColor"/><circle cx="12.5" cy="8" r="1.35" fill="currentColor"/></svg></button></div>
   </header>
 
@@ -3321,14 +3322,14 @@ body.hm3on #v-movimientos>#s-mov{margin-top:max(env(safe-area-inset-top,0px),10p
   <div class="view" id="v-movimientos" hidden>
   <nav class="mvt" id="mtabs" aria-label="Movimientos">
     <a href="#todo" data-t="todo" class="mvt-all"><span class="mvt-n">Movimientos<em></em></span><b class="mvt-v num" id="mt-all"></b><span class="mvt-s">en total</span></a>
-    <a href="#transacciones" data-t="transacciones"><span class="mvt-n">Transacciones<em></em></span><b class="mvt-v num" id="mt-tx"></b><span class="mvt-s">resultado</span></a>
-    <a href="#dividendos" data-t="dividendos"><span class="mvt-n">Dividendos<em></em></span><b class="mvt-v num" id="mt-dv"></b><span class="mvt-s">brutos</span></a>
+    <a href="#transacciones" data-t="transacciones"><span class="mvt-n">Compras<em></em></span><b class="mvt-v num" id="mt-tx"></b><span class="mvt-s">invertido</span></a>
+    <b id="mt-dv" hidden></b>
     <a href="#aportaciones" data-t="aportaciones"><span class="mvt-n">Aportaciones<em></em></span><b class="mvt-v num" id="mt-ap"></b><span class="mvt-s">netas</span></a>
-    <a href="#ajustes" data-t="ajustes"><span class="mvt-n">Ajustes<em></em></span><b class="mvt-v num" id="mt-aj"></b><span class="mvt-s">netos</span></a>
+    <b id="mt-aj" hidden></b>
   </nav>
   <section class="panel" id="s-mov">
     <div class="toolbar">
-      <label class="search"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input class="inp" type="search" id="m-q" placeholder="Buscar empresa, ticker o comentario" aria-label="Buscar"></label>
+      <label class="search"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input class="inp" type="search" id="m-q" placeholder="Buscar fondo, ISIN o comentario" aria-label="Buscar"></label>
       <button type="button" class="inp ftg" id="m-ftg" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.5h12M4.5 8h7M7 11.5h2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Filtros</span><b class="ftn num" id="m-ftn"></b></button>
       <select class="inp" id="m-year" aria-label="Año"></select>
       <select class="inp" id="m-broker" aria-label="Bróker"></select>
@@ -3902,7 +3903,7 @@ function drawIdx(i){ const s=DATA.idx[i], n=ixN[i]??12, all=s.pts, L=all[all.len
     fill:{target:"start"},backgroundColor:hexTok(up?"--pos":"--neg")+"1F"}]},options:o,plugins:[crosshair]}); }
 document.addEventListener("click",e=>{ const b=e.target.closest("#ix-list .seg button"); if(!b) return; const g=b.parentElement, i=+g.dataset.ix;
   ixN[i]=+b.dataset.n; g.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); drawIdx(i); });
-const VER="v427";   // la versión publicada, en el pie
+const VER="v428";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
@@ -4177,11 +4178,11 @@ function render(d){
   if(d.tray.length){ if(trayArrastre) trayPendiente=true; else traySliders(); }   // COD-14
 
   { const N=(n,a,b)=>`${nf(0).format(n)} ${n===1?a:b}`, S=(t,s)=>{ const a=document.querySelector(`#mtabs a[data-t="${t}"] .mvt-s`); if(a) a.textContent=s; };   // debajo de la cifra, cuántos movimientos la forman
-    S("transacciones",`resultado · ${N(new Set(d.tx.filter(r=>r.sd).map(r=>[r.ticker,+r.sd,r.sp,r.broker].join("|"))).size,"venta","ventas")}`); S("dividendos",`brutos · ${N(d.dv.filter(d.isPaid).length,"cobro","cobros")}`);
+    S("transacciones",`invertido · ${N(d.tx.length,"compra","compras")}`); S("dividendos",`brutos · ${N(d.dv.filter(d.isPaid).length,"cobro","cobros")}`);
     S("aportaciones",`netas · ${N(MOV.aportaciones.rows().length,"movimiento","movimientos")}`); S("ajustes",`netos · ${N(MOV.ajustes.rows().length,"ajuste","ajustes")}`); }
   $("mt-all").textContent=nf(0).format(MOV.todo.rows().length);
   { const pl=sum(d.tx.filter(r=>r.sd),r=>r.pnl), aj=sum(d.aj,r=>r.amt);
-    $("mt-tx").textContent=seur(pl); $("mt-tx").className="mvt-v num "+cls(pl);
+    $("mt-tx").textContent=eur(sum(d.tx,r=>r.bt||0)); $("mt-tx").className="mvt-v num";
     $("mt-dv").textContent=eur(sum(d.dv.filter(d.isPaid),r=>r.gross));
     $("mt-ap").textContent=eur(sum(d.ap,r=>r.amt));
     $("mt-aj").textContent=seur(aj); $("mt-aj").className="mvt-v num "+cls(aj); }
@@ -4495,7 +4496,7 @@ function movAll(){ const d=DATA; if(!d) return []; if(movAllC&&movAllC.d===d) re
 const MOV = {
   todo:{ rows:movAll, rc:r=>"mr mr-"+tipoMov(r), date:r=>r.d, years:r=>[yr(r.d)], text:r=>[r.name,r.ticker,r.broker,r.note,r.ty].join(" "), sort:["d",-1],
     cols:[ {k:"d",l:"Fecha",r:"sub",f:r=>sdate(r.d)},
-      {k:"name",l:"Empresa o cuenta",r:"main",left:1,sv:r=>r.name||r.broker,f:r=>r.ticker?coCell(r.name,r.ticker):`<div class="co"><span class="lgb mvg" aria-hidden="true"><svg viewBox="0 0 22 22">${iconosMov[r.g]}</svg></span><b>${esc(r.broker||"")}</b></div>`},
+      {k:"name",l:"Fondo o cuenta",r:"main",left:1,sv:r=>r.name||r.broker,f:r=>r.ticker?coCell(r.name,r.ticker):`<div class="co"><span class="lgb mvg" aria-hidden="true"><svg viewBox="0 0 22 22">${iconosMov[r.g]}</svg></span><b>${esc(r.broker||"")}</b></div>`},
       {k:"ty",l:"Tipo",left:1,nl:1,w:112,f:r=>`<span class="tag mt mt-${tipoMov(r)}">${esc(r.ty)}</span>`},
       {k:"det",l:"Detalle",wrap:1,nl:1,sec:1,f:r=>r.detH||esc(r.det||""),mf:r=>!(r.ds||r.det)?"":r.g?`<span class="w">${esc(r.det)}</span>`:esc(r.ds||r.det)},
       {k:"broker",l:"Bróker",left:1,hs:1,sec:1,f:r=>esc(r.broker||"")},
@@ -4506,13 +4507,13 @@ const MOV = {
         ap=iy.filter(r=>r.g==="in"||r.g==="out"), bu=iy.filter(r=>r.ty==="Compra"), se=iy.filter(r=>r.ty==="Venta"), dv=iy.filter(r=>r.dv), pl=sum(se,r=>r.pnl);
       return [{k:`Aportado en ${y}`,v:eur(sum(ap,r=>r.v)),sub:`${n(ap.length)} ${ap.length===1?"movimiento":"movimientos"}`},
         {k:`Comprado en ${y}`,v:eur(sum(bu,r=>r.v)),sub:`${n(bu.length)} ${bu.length===1?"compra":"compras"}`},
-        {k:`Vendido en ${y}`,v:eur(sum(se,r=>r.v)),sub:se.length?`${n(se.length)} ${se.length===1?"venta":"ventas"} · <span class="${cls(pl)}">${seur(pl)}</span>`:"sin ventas"},
-        {k:`Dividendos en ${y}`,v:eur(sum(dv,r=>r.v)),sub:`brutos · ${n(dv.length)} ${dv.length===1?"cobro":"cobros"}`}]; } },
+        (a=>({k:"Aportado en total",v:eur(sum(a,r=>r.v)),sub:"neto, desde el principio"}))(all.filter(r=>r.g==="in"||r.g==="out")),
+        (b=>({k:"Invertido en fondos",v:eur(sum(b,r=>r.v)),sub:`${n(b.length)} ${b.length===1?"compra":"compras"} en total`}))(all.filter(r=>r.ty==="Compra"))]; } },
   transacciones:{ rows:()=>DATA?DATA.tx:[], date:r=>r.sd||r.bd, years:r=>[yr(r.bd),yr(r.sd)], text:r=>[r.name,r.ticker,r.note].join(" "), sort:["bd",-1], states:[["","Estado"],["open","Abiertas"],["closed","Cerradas"]], stateFn:(r,s)=>s==="open"?!r.sd:!!r.sd,
     cols:[ {k:"bd",l:"Fecha",r:"sub",f:r=>sdate(r.bd)}, {k:"name",l:"Fondo",r:"main",left:1,f:r=>coCell(r.name,r.ticker,infoBtn(r.note,"tx"+r.ticker+(+r.bd)))},
-      {k:"broker",l:"Bróker",left:1,hs:1,sec:1,f:r=>esc(r.broker||"")}, {k:"shares",l:"Participaciones",sec:1,f:r=>{ const s=shares(r.shares); return s?`<span class="pv pvn">${s}</span>`:""; },mf:r=>!isNum(r.shares)?"":`${shares(r.shares)} ${r.shares===1?"participación":"participaciones"}`},
+      {k:"broker",l:"Bróker",left:1,hs:1,sec:1,f:r=>esc(r.broker||"")}, {k:"shares",l:"Particip.",sec:1,f:r=>{ const s=shares(r.shares); return s?`<span class="pv pvn">${s}</span>`:""; },mf:r=>!isNum(r.shares)?"":`${shares(r.shares)} ${r.shares===1?"participación":"participaciones"}`},
       {k:"bp",l:"Precio de compra",hs:1,sec:1,f:r=>money(r.bp,r.cur)}, {k:"bt",l:"Importe",r:"amt",f:r=>seur(-r.bt,2)},
-      {k:"st",l:"Estado",nl:1,sv:r=>r.sd?1:0,f:r=>r.sd?`<span class="tag cl">Cerrada</span>`:`<span class="tag">Abierta</span>`},
+      {k:"st",l:"Estado",nl:1,sv:r=>r.sd?1:0,f:r=>r.sd?`<span class="tag cl">Cerrada</span>`:""},
       {k:"sd",l:"Fecha de venta",sec:1,sv:r=>r.sd?r.sd.getTime():null,f:r=>r.sd?sdate(r.sd):""},
       {k:"sp",l:"Precio de venta",hs:1,sec:1,f:r=>r.sd?money(r.sp,r.cur):""},
       {k:"pnl",l:"Resultado",sv:r=>r.sd?r.pnl:null,f:r=>r.sd?`<span class="${cls(r.pnl)}">${seur(r.pnl,2)}</span>`:""} ],
@@ -4520,6 +4521,11 @@ const MOV = {
     // cuánto aguantas y cuántas ventas salen bien (todo, o del año elegido). Se cuentan órdenes, no filas: una venta que
     // cierra varias compras (misma empresa, día, precio y bróker) es una sola, con el resultado de todas
     kpis:(all,ys)=>{ const cl=all.filter(r=>r.sd&&(!ys||yr(r.sd)===ys)), bu=all.filter(r=>!ys||yr(r.bd)===ys), pl=sum(cl,r=>r.pnl), ord=(l,d,p)=>{ const m=new Map(); l.forEach(r=>{ const k=[r.ticker,+r[d],r[p],r.broker].join("|"); m.set(k,(m.get(k)||0)+(r.pnl||0)); }); return [...m.values()]; }, ob=ord(bu,"bd","bp"), os=ord(cl,"sd","sp"), fees=sum(cl,r=>(r.bfee||0)+(r.sfee||0)), ops=ob.length+os.length, win=os.filter(v=>v>0).length, hold=cl.length?sum(cl,r=>(r.sd-r.bd)/DIA_MS/365.25)/cl.length:null, und=t=>{ const m=String(t||"").match(/^(\S+)\s[CP]\d/); return m?(DATA.tx.find(r=>!/\s/.test(r.ticker)&&String(r.ticker).split(":").pop()===m[1])||{}).ticker||m[1]:t; };
+      { const inv=sum(bu,r=>r.bt||0), nb=bu.length, nfo=new Set(bu.map(r=>r.ticker)).size, ul=bu.reduce((m,r)=>r.bd>m?r.bd:m,null);
+        return [{k:ys?`Invertido en ${ys}`:"Invertido",v:eur(inv),sub:`${nf(0).format(nb)} ${nb===1?"compra":"compras"}`},
+          {k:"Fondos",v:nf(0).format(nfo),sub:nfo===1?"fondo comprado":"fondos comprados"},
+          {k:"Compra media",v:nb?eur(inv/nb):"",sub:"por operación"},
+          {k:"Última compra",v:ul?fechaCorta(ul):"",sub:ul?`hace ${nf(0).format(Math.max(0,Math.round((Date.now()-ul)/864e5)))} días`:""}]; }
       return [{k:"Resultado realizado",v:seur(pl),c:cls(pl),sub:cl.length?`tras ${eur(fees)} de comisiones`:"sin ventas"},
         // compras y ventas en la línea de la cifra, la barra con su proporción y las empresas en una sola línea: la casilla, del alto de las demás
         {k:"Compras y ventas",c:"mkcv",v:ops?`${nf(0).format(ob.length)}<small class="mk-u"> ${ob.length===1?"compra":"compras"}</small><small class="mk-u mk-d"> · </small>${nf(0).format(os.length)}<small class="mk-u"> ${os.length===1?"venta":"ventas"}</small>`:"0",nolg:1,split:ops?[{v:ob.length},{v:os.length}]:null,
@@ -4531,7 +4537,7 @@ const MOV = {
     cols:[ {k:"d",l:"Fecha",r:"sub",f:r=>sdate(r.d)}, {k:"name",l:"Fondo",r:"main",left:1,f:r=>coCell(r.name,r.ticker,r.type&&r.type!=="Dividendo"?`<span class="tag acc">${esc(r.type)}</span>`:"")},
       {k:"broker",l:"Bróker",left:1,hs:1,sec:1,f:r=>esc(r.broker||"")},
       {k:"st",l:"Estado",nl:1,sv:r=>DATA.isPaid(r)?0:1,f:r=>DATA.isPaid(r)?`<span class="tag acc">Cobrado</span>`:`<span class="tag">Previsto</span>`},
-      {k:"shares",l:"Participaciones",hs:1,sec:1,f:r=>{ const s=shares(r.shares); return s?`<span class="pv pvn">${s}</span>`:""; }},
+      {k:"shares",l:"Particip.",hs:1,sec:1,f:r=>{ const s=shares(r.shares); return s?`<span class="pv pvn">${s}</span>`:""; }},
       {k:"dps",l:"Por acción",hs:1,sec:1,f:r=>dpsF(r.dps,r.cur)},
       {k:"ret",l:"Retención",hs:1,sv:r=>(r.gross||0)-(r.net||0),f:r=>{const x=(r.gross||0)-(r.net||0); return x>0.005?`<span class="neg">−${nf(2).format(x)} €</span>`:"";}},
       {k:"net",l:"En bróker",hs:1,sec:1,f:r=>seur(r.net,2)},   // solo para cuadrar lo que queda en el bróker: los dividendos se cuentan siempre en bruto
@@ -4628,7 +4634,7 @@ $("m-rst").addEventListener("click",()=>{ const c=MOV[mtab]; $("m-q").value=""; 
   if(c.states){ mstate[mtab]=c.states[0][0]; $("m-state").value=mstate[mtab]; } delete msort[mtab]; mshow=MSTEP; renderMov(false); });
 $("m-sort").addEventListener("input",e=>{ const k=e.target.value; msort[mtab]=[k,/^(name|broker|type|note)$/.test(k)?1:-1]; renderMov(false); });
 // buscador: texto corto en móvil para que no se corte
-{ const mq=matchMedia("(max-width:600.98px)"), ph=()=>{ $("m-q").placeholder=mq.matches?"Buscar":"Buscar empresa, ticker o comentario"; }; mq.addEventListener?.("change",ph); ph(); }
+{ const mq=matchMedia("(max-width:600.98px)"), ph=()=>{ $("m-q").placeholder=mq.matches?"Buscar":"Buscar fondo, ISIN o comentario"; }; mq.addEventListener?.("change",ph); ph(); }
 
 /* ---------- universo ---------- */
 // «Por revisar» (v367): la empresa ha presentado resultados después de la fecha de tu valoración (fechas del calendario del agente).
@@ -5751,15 +5757,15 @@ const tabY={};   // cada pestaña recuerda hasta dónde habías bajado (pulsar l
 function navega(token,push){
   if(typeof token==="string"&&token.startsWith("actualidad/")){ const q=token.slice(11).split("/"); actAbierta=q[0]||null; actPestana=q[1]==="noticias"?"nws":q[0]?"res":actPestana; token="actualidad"; } else if(token==="actualidad"&&push&&view==="actualidad") actAbierta=null;
   if(token==="calendario") token="actualidad";
-  const sub=Object.keys(MOV).includes(token)||token==="movimientos"; if(token==="movimientos") token="aportaciones";
+  const sub=Object.keys(MOV).includes(token);
   if(token==="universo") token="preseleccion";
-  if(sub&&!["aportaciones","transacciones"].includes(token)) token="aportaciones";
-  const v = token==="indices" ? "indices" : Object.keys(MOV).includes(token) ? "movimientos" : "resumen";
+  if(sub&&!["todo","transacciones","aportaciones"].includes(token)) token="todo";
+  const v = token==="indices" ? "indices" : sub||token==="movimientos" ? "movimientos" : "resumen";
   if(sub){ if(mtab!==token){ mtab=token; $("m-q").value=""; } }
   if(v!==view) tabY[view]=scrollY;
   const changed = v!==view; view=v; if(changed&&sheet){ sheet=null; renderSheet(); }
   document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!=="v-"+view);
-  document.querySelectorAll("#nav a").forEach(a=>a.setAttribute("aria-current",(view==="movimientos"?a.dataset.v===mtab:a.dataset.v===view)?"page":"false"));
+  document.querySelectorAll("#nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===view?"page":"false"));
   document.body.dataset.view=view;
   if(push){ try{ history.replaceState(null,"","#"+(token==="preseleccion"?"universo":token==="actualidad"?"calendario":token)); }catch{} }
   if(DATA){ const nuevo=drawn[view]!==stampOf(view);   // la pestaña se rehace solo si algo ha cambiado desde que se dibujó

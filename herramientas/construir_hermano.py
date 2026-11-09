@@ -23,23 +23,45 @@ def cambia(viejo, nuevo, todas=False, regex=False):
         sys.exit(f"construir_hermano: no encaja ({n} coincidencias): {viejo[:90]!r}")
     t = re.sub(viejo, nuevo, t) if regex else t.replace(viejo, nuevo)
 
-# --- 1. título y menú: tres pestañas
+# --- 1. título y menú: Cartera, Movimientos (compras y aportaciones) e Índices
 cambia("<title>Cartera</title>", f"<title>{NOMBRE}</title>")
 nav = re.search(r'<nav class="nav" id="nav" aria-label="Secciones">(.*?)</nav>', t, re.S).group(1)
 a = dict(re.findall(r'(<a href="#[a-z]+" data-v="([a-z]+)">.*?</a>)', nav, re.S)[i][::-1] for i in range(5))
 icono = lambda v: re.search(r"<svg.*?</svg>", a[v], re.S).group(0)
 nuevo_nav = (f'<a href="#resumen" data-v="resumen">{icono("resumen")}<span>Cartera</span></a>'
-             f'<a href="#aportaciones" data-v="aportaciones">{icono("analisis")}<span>Aportaciones</span></a>'
-             f'<a href="#transacciones" data-v="transacciones">{icono("movimientos")}<span>Compras</span></a>'
+             f'<a href="#movimientos" data-v="movimientos">{icono("movimientos")}<span>Movimientos</span></a>'
              f'<a href="#indices" data-v="indices">{icono("preseleccion")}<span>Índices</span></a>')
 cambia(nav, nuevo_nav)
-# la pestaña marcada: en Movimientos, la sub-pestaña que se ve (Aportaciones o Compras)
-cambia('document.querySelectorAll("#nav a").forEach(a=>a.setAttribute("aria-current",a.dataset.v===view?"page":"false"));',
-       'document.querySelectorAll("#nav a").forEach(a=>a.setAttribute("aria-current",(view==="movimientos"?a.dataset.v===mtab:a.dataset.v===view)?"page":"false"));')
-# fuera de estas cuatro, se abre la Cartera
+# Movimientos solo con «todo», Compras y Aportaciones (sin Dividendos ni Ajustes); fuera de las tres pestañas, la Cartera
 cambia('const v = sub ? "movimientos" : (["resumen","analisis","movimientos","preseleccion","actualidad"].includes(token)?token:"resumen");',
-       'if(sub&&!["aportaciones","transacciones"].includes(token)) token="aportaciones";\n  const v = token==="indices" ? "indices" : Object.keys(MOV).includes(token) ? "movimientos" : "resumen";')
-cambia('const sub=Object.keys(MOV).includes(token);', 'const sub=Object.keys(MOV).includes(token)||token==="movimientos"; if(token==="movimientos") token="aportaciones";')
+       'if(sub&&!["todo","transacciones","aportaciones"].includes(token)) token="todo";\n  const v = token==="indices" ? "indices" : sub||token==="movimientos" ? "movimientos" : "resumen";')
+cambia('<a href="#dividendos" data-t="dividendos"><span class="mvt-n">Dividendos<em></em></span><b class="mvt-v num" id="mt-dv"></b><span class="mvt-s">brutos</span></a>', '<b id="mt-dv" hidden></b>')
+cambia('<a href="#ajustes" data-t="ajustes"><span class="mvt-n">Ajustes<em></em></span><b class="mvt-v num" id="mt-aj"></b><span class="mvt-s">netos</span></a>', '<b id="mt-aj" hidden></b>')
+cambia('<span class="mvt-n">Transacciones<em></em></span>', '<span class="mvt-n">Compras<em></em></span>')
+# Movimientos con lo que le interesa (solo compra y aporta): sin ventas ni dividendos
+cambia('<b class="mvt-v num" id="mt-tx"></b><span class="mvt-s">resultado</span>', '<b class="mvt-v num" id="mt-tx"></b><span class="mvt-s">invertido</span>')
+cambia('S("transacciones",`resultado · ${N(new Set(d.tx.filter(r=>r.sd).map(r=>[r.ticker,+r.sd,r.sp,r.broker].join("|"))).size,"venta","ventas")}`);',
+       'S("transacciones",`invertido · ${N(d.tx.length,"compra","compras")}`);')
+cambia('$("mt-tx").textContent=seur(pl); $("mt-tx").className="mvt-v num "+cls(pl);',
+       '$("mt-tx").textContent=eur(sum(d.tx,r=>r.bt||0)); $("mt-tx").className="mvt-v num";')
+cambia('l:"Empresa o cuenta"', 'l:"Fondo o cuenta"')
+cambia('placeholder="Buscar empresa, ticker o comentario"', 'placeholder="Buscar fondo, ISIN o comentario"')
+cambia('?"Buscar":"Buscar empresa, ticker o comentario"', '?"Buscar":"Buscar fondo, ISIN o comentario"')
+# sus compras siguen todas abiertas: sin la etiqueta «Abierta» (solo se ve «Cerrada» si algún día vende)
+cambia(':`<span class="tag">Abierta</span>`}', ':""}')
+# «todo»: en vez de vendido y dividendos del año, lo aportado e invertido desde el principio
+cambia("""        {k:`Vendido en ${y}`,v:eur(sum(se,r=>r.v)),sub:se.length?`${n(se.length)} ${se.length===1?"venta":"ventas"} · <span class="${cls(pl)}">${seur(pl)}</span>`:"sin ventas"},
+        {k:`Dividendos en ${y}`,v:eur(sum(dv,r=>r.v)),sub:`brutos · ${n(dv.length)} ${dv.length===1?"cobro":"cobros"}`}]; } },""",
+"""        (a=>({k:"Aportado en total",v:eur(sum(a,r=>r.v)),sub:"neto, desde el principio"}))(all.filter(r=>r.g==="in"||r.g==="out")),
+        (b=>({k:"Invertido en fondos",v:eur(sum(b,r=>r.v)),sub:`${n(b.length)} ${b.length===1?"compra":"compras"} en total`}))(all.filter(r=>r.ty==="Compra"))]; } },""")
+# Compras: lo invertido, en cuántos fondos, la compra media y la última
+cambia('      return [{k:"Resultado realizado",v:seur(pl),c:cls(pl),',
+       """      { const inv=sum(bu,r=>r.bt||0), nb=bu.length, nfo=new Set(bu.map(r=>r.ticker)).size, ul=bu.reduce((m,r)=>r.bd>m?r.bd:m,null);
+        return [{k:ys?`Invertido en ${ys}`:"Invertido",v:eur(inv),sub:`${nf(0).format(nb)} ${nb===1?"compra":"compras"}`},
+          {k:"Fondos",v:nf(0).format(nfo),sub:nfo===1?"fondo comprado":"fondos comprados"},
+          {k:"Compra media",v:nb?eur(inv/nb):"",sub:"por operación"},
+          {k:"Última compra",v:ul?fechaCorta(ul):"",sub:ul?`hace ${nf(0).format(Math.max(0,Math.round((Date.now()-ul)/864e5)))} días`:""}]; }
+      return [{k:"Resultado realizado",v:seur(pl),c:cls(pl),""")
 
 # --- 2. su hoja: solo sus pestañas, y sus títulos como los de la hoja original
 cambia('const SHEETS=["Dashboard","Cartera","Preselección","Valoración","Transacciones","Dividendos","Aportaciones","Ajustes","Trayectoria","Valor Mensual","Referencias"];',
@@ -88,7 +110,7 @@ cambia('data-l="Empresa"', 'data-l="Fondo"', todas=True)
 cambia('"empresa":"empresas"', '"fondo":"fondos"', todas=True)
 cambia('class="thb">Acciones</button>', 'class="thb">Particip.</button>')
 cambia('data-l="Acciones"', 'data-l="Participaciones"', todas=True)
-cambia('l:"Acciones"', 'l:"Participaciones"', todas=True)
+cambia('l:"Acciones"', 'l:"Particip."', todas=True)
 
 # --- 4. su ID, su clave y su copia de datos, aparte de los del usuario
 cambia('"cartera-', '"fondos-', todas=True)
@@ -98,9 +120,11 @@ cambia('indexedDB.deleteDatabase("cartera")', 'indexedDB.deleteDatabase("fondos"
 # --- 5. lo que no usa: cuadre con la hoja, avisos de la hoja, sub-pestañas de Movimientos, MSCI World, buscador
 css = """
 /* app del hermano: solo Cartera, Aportaciones y Compras */
-#s-check,#chk-show,#hoja-al,#mtabs,#kbtn,.hm5-mv{display:none!important}
+#s-check,#chk-show,#hoja-al,#kbtn{display:none!important}
 /* sin dividendos: fuera la columna de rentabilidad por dividendo */
 #t-pos [data-k="yov"],#t-pos td[data-l="Rent. div."]{display:none!important}
+/* no vende: fuera el resultado de las ventas, el estado, la fecha y el precio de venta */
+#m-state,#s-mov [data-k="pnl"],#s-mov[data-t="transacciones"] :is([data-k="st"],[data-k="sd"],[data-k="sp"]){display:none!important}
 /* Índices */
 #ix-list{display:grid;gap:16px}
 @media (min-width:1000px){#ix-list{grid-template-columns:1fr 1fr}}
@@ -112,7 +136,6 @@ css = """
 #v-indices .ix-0{margin:0;padding:24px 0;color:var(--ink3);font-size:var(--fs-13);text-align:center}
 @media (max-width:700.98px){#v-indices .chart-head{flex-direction:column;align-items:flex-start;gap:10px}}
 body.hm3on #v-indices>#ix-list{margin-top:max(env(safe-area-inset-top,0px),10px)}
-body.hm3on #v-movimientos>#s-mov{margin-top:max(env(safe-area-inset-top,0px),10px)}
 .evo-leg span:nth-child(3){display:none}
 """
 cambia('\n</style>\n\n<div class="wrap">', css + '</style>\n\n<div class="wrap">')

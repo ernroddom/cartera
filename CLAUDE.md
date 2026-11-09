@@ -80,7 +80,8 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
   siempre «DeGiro»; cambiar el icono (aún es el del amigo).
 - **App del hermano («Cartera de Inversión», `web/hermano/` → `…github.io/cartera/hermano/`):** 4 fondos por ISIN, aportaciones
   periódicas, hoja con el formato ANTIGUO del usuario. No hay segunda copia del programa: `herramientas/construir_hermano.py`
-  parte de `fuente/cartera.html` y le aplica cambios al construir (3 pestañas Cartera/Aportaciones/Compras, lectura de su
+  parte de `fuente/cartera.html` y le aplica cambios al construir (desde v428: pestañas Cartera, Movimientos —solo «todo»,
+  Compras y Aportaciones, con datos de quien solo compra: invertido, fondos, compra media— e Índices; lectura de su
   formato, «fondos/participaciones», sin cuadre ni avisos, solo sus pestañas, ID/clave/copia guardados como `fondos-…` para no
   mezclarse con la del usuario). Si un cambio en `cartera.html` rompe un parche, el script se para y dice cuál. Tras tocar
   `cartera.html`, construye las dos (`construir.py` y `construir_hermano.py`) y publica `web/` entera en `gh-pages`.
