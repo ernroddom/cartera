@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-/6yMdZKUchE320UAzj5V2tqSPGpojTeHKkwXtYfJIlM=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-YYRfXgIqEVKgRUPSRX3OfgyVjom+bIrLRJfBz38rfRA=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3335,6 +3335,8 @@ html.lmono[data-theme="dark"] .zdl .lgb:not(.gr) img{filter:brightness(0) invert
 
 /* v438 · en el PC, todo en una columna centrada y más estrecha, como la web de tu amigo */
 @media (min-width:1181px){.wrap{max-width:1100px}}
+/* v439 · Posiciones: con la columna de 1100 px, la tabla ya no se ensancha con la pantalla (si no, «Peso» se quedaba sin sitio y su barra pisaba Rentabilidad) */
+@media (min-width:1201px){ #t-pos{--ex:0px} #t-pos th[data-k="name"]{width:176px} }
 
 </style>
 
@@ -4072,7 +4074,7 @@ function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) retu
   C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
 document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
 alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
-const VER="v438";   // la versión publicada, en el pie
+const VER="v439";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
