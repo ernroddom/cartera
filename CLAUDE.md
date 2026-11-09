@@ -103,3 +103,10 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
   (±45 días), pinta su fecha e importe real (acciones a la fecha ex × importe × cambio) con ✓ y avisa si cambia el dividendo
   por acción o la fecha («En tu hoja: …»), o si no está en la hoja.
 
+- **Rediseño (v430–v438), solo en la web del usuario:** paleta nueva (claro y oscuro, bloque al final del CSS), menú Resumen ·
+  Análisis · Movimientos · Calendario · Universo, y en todas menos Resumen una banda blanca con frase grande (`.zband`, `.zh`,
+  desplegable `zSel`) en lugar de la franja marrón de casillas (ocultas con CSS: `#s-aidx`, `#mtabs`/`.hm5-mv`, `#s-cal`, `#s-uni`).
+  Funciones: `renderAh`/`renderDvHead` (Análisis), `renderMh` (Movimientos), `renderCh` (Calendario: dos meses y «Fuera de tu
+  cartera»), `renderUh`/`renderUe` (Universo: mosaicos suben/bajan y puntos por rentabilidad exigida). Logos en blanco y negro.
+  En PC todo va en una columna de 1100 px (`@media (min-width:1181px){.wrap{max-width:1100px}}`). El contenido antiguo sigue
+  debajo de cada banda. La app del hermano NO lleva el rediseño: se construye desde `fuente/hermano-base.html` (copia de v429).
