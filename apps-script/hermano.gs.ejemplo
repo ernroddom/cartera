@@ -1,0 +1,89 @@
+/**
+ * Script de la app «Cartera de Inversión» (versión 2: con la pestaña Índices). Pon el ID de su hoja en HOJA_ID (lo que va entre /d/ y /edit en su dirección).
+ * - Entrega la hoja a la app (con la clave, que se crea sola y se guarda dentro del proyecto; no está escrita aquí).
+ * - Cada día apunta en la pestaña «Índices» el precio de los fondos que no salen en Google Finance (Cobas y Numantia):
+ *   coge el precio de la pestaña Cartera y lo añade debajo, en el bloque cuyo título coincide con el nombre del fondo.
+ * Primera vez: pega todo esto en Código.gs → Guardar → ejecuta «probar» (te enseña la clave) → ejecuta «instalar» (activa el
+ * apunte diario) → Implementar → Nueva implementación → Aplicación web · Ejecutar como: Yo · Cualquier usuario → copia el ID.
+ * Si ya tenías el script: pega esto encima → Guardar → ejecuta «instalar» → Implementar → Gestionar implementaciones →
+ * lápiz → Versión: Nueva versión → Implementar. La clave y el ID no cambian.
+ */
+const HOJA_ID = 'PON_AQUI_EL_ID_DE_LA_HOJA_DEL_HERMANO';
+const PESTANA_INDICES = 'Índices';
+
+function doPost(e) {
+  let pide = {};
+  try { pide = JSON.parse((e && e.postData && e.postData.contents) || '{}'); } catch (err) {}
+  if (!pide.k || !iguales_(String(pide.k), clave_())) return json_({ ok: false, error: 'clave' });
+  try {
+    if (pide.q === 'informe') return json_({ ok: true });   // esta app no tiene calendario
+    return json_({ ok: true, xlsx: hojaEnXlsx_() });
+  } catch (err) {
+    return json_({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+// la hoja entera exportada como .xlsx (con los valores ya calculados por Google), en base64
+function hojaEnXlsx_() {
+  SpreadsheetApp.openById(HOJA_ID);   // obliga a pedir permiso sobre la hoja
+  const url = 'https://docs.google.com/spreadsheets/d/' + HOJA_ID + '/export?format=xlsx';
+  const r = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() }, muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) throw new Error('No he podido exportar la hoja (código ' + r.getResponseCode() + ')');
+  return Utilities.base64Encode(r.getBlob().getBytes());
+}
+
+// Apunta hoy el precio de cada fondo de «Índices» que tenga su precio en Cartera (los que no son fórmulas de Google Finance).
+function apuntarPrecios() {
+  const hoy = new Date(), dia = hoy.getDay();
+  if (dia === 0 || dia === 6) return;                     // los fondos no publican precio en fin de semana
+  const fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  const libro = SpreadsheetApp.openById(HOJA_ID), ind = libro.getSheetByName(PESTANA_INDICES), car = libro.getSheetByName('Cartera');
+  if (!ind || !car) throw new Error('Faltan las pestañas «' + PESTANA_INDICES + '» o «Cartera»');
+  // precios de Cartera: fila de títulos con «Precio»; en cada fila, el nombre del fondo está en alguna de sus celdas
+  const C = car.getDataRange().getValues();
+  let hp = -1, cp = -1;
+  for (let r = 0; r < Math.min(C.length, 12) && hp < 0; r++) { const c = C[r].indexOf('Precio'); if (c >= 0) { hp = r; cp = c; } }
+  if (hp < 0) throw new Error('No encuentro la columna «Precio» en Cartera');
+  const precioDe = nombre => { for (let r = hp + 1; r < C.length; r++) if (C[r].some(v => String(v).trim() === nombre)) { const p = C[r][cp]; return typeof p === 'number' && p > 0 ? p : null; } return null; };
+  // bloques de Índices: «Fecha» y, a su derecha, el nombre del fondo
+  const I = ind.getRange(1, 1, Math.min(ind.getLastRow(), 12), ind.getLastColumn()).getValues();
+  let hi = -1; for (let r = 0; r < I.length && hi < 0; r++) if (I[r].indexOf('Fecha') >= 0) hi = r;
+  if (hi < 0) throw new Error('No encuentro la fila de títulos de «' + PESTANA_INDICES + '»');
+  I[hi].forEach((v, c) => {
+    if (v !== 'Fecha') return;
+    const nombre = String(I[hi][c + 1] || '').trim(), precio = nombre ? precioDe(nombre) : null;
+    if (precio == null) return;                                               // sin precio en Cartera (p. ej. los MSCI)
+    const col = ind.getRange(hi + 2, c + 1, ind.getMaxRows() - hi - 1, 1).getValues();
+    let n = col.findIndex(x => x[0] === '' || x[0] === null); if (n < 0) n = col.length;
+    const ultima = n > 0 ? col[n - 1][0] : null;
+    if (ultima instanceof Date && ultima >= fecha) return;                     // hoy ya está apuntado
+    if (n >= col.length) ind.insertRowsAfter(ind.getMaxRows(), 500);
+    ind.getRange(hi + 2 + n, c + 1, 1, 2).setValues([[fecha, precio]]);
+  });
+}
+
+// Activa el apunte diario (entre las 21 y las 22 h) y apunta ya el de hoy. Basta con ejecutarla una vez.
+function instalar() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'apuntarPrecios').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('apuntarPrecios').timeBased().everyDays(1).atHour(21).create();
+  apuntarPrecios();
+  Logger.log('Listo: cada día se apuntará el precio de los fondos en «' + PESTANA_INDICES + '».');
+}
+
+// la clave: se crea una vez, al azar, y se guarda en las propiedades del proyecto
+function clave_() {
+  const p = PropertiesService.getScriptProperties();
+  let k = p.getProperty('SECRETO');
+  if (!k) { k = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, ''); p.setProperty('SECRETO', k); }
+  return k;
+}
+
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+// comparación que tarda lo mismo acierte o falle (para no dar pistas sobre la clave)
+function iguales_(a, b) { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; }
+
+// Ejecuta esta función desde el editor: comprueba que lee la hoja y te enseña la clave para el móvil
+function probar() {
+  Logger.log('Hoja leída: ' + hojaEnXlsx_().length + ' caracteres');
+  Logger.log('CLAVE (cópiala en una nota privada): ' + clave_());
+}

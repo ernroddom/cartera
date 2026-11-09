@@ -87,5 +87,10 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
   **Cualquier cambio que afecte a su app (también solo en `construir_hermano.py`) debe subir `VER` en `cartera.html`**: su móvil
   solo se recarga solo si `version.txt` cambia. Ya no hay acceso a su hoja: para probar, pide al usuario un Excel reciente
   de la hoja del hermano (va a `mi-hoja/`, que no se sube). Su script no cambia salvo que use otra hoja (`HOJA_ID`).
-  Su «Valor Cartera»/«Invertido» de Valor Mensual son solo los fondos (sin liquidez): la gráfica compara eso. Su hoja lleva
+  Su «Valor Cartera»/«Invertido» de Valor Mensual son solo los fondos (sin liquidez): la gráfica compara eso.
+  **Pestaña Índices (v427):** en su hoja, pestaña «Índices» con bloques «Fecha | nombre» (fila 3) y una nota encima (fila 1).
+  MSCI World y MSCI Emerging Markets salen de GOOGLEFINANCE semanal de los ETF `EPA:CW8` y `EPA:AEEM` (fórmula
+  LET+CHOOSEROWS: su Sheets no tiene DROP). Cobas y Numantia los apunta cada día su script (`apps-script/hermano.gs.ejemplo`,
+  función `apuntarPrecios`, activada con `instalar`) cogiendo el precio de Cartera por el nombre del fondo. La app oculta la
+  columna «Rent. div.» (no cobra dividendos). La TIR por fondo sale «—» hasta 6 meses en cartera: es a propósito. Su hoja lleva
   pestañas ocultas copiadas de la plantilla del usuario (Trayectoria, Preselección…) con datos del usuario: la app no las lee.
