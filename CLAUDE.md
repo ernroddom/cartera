@@ -84,5 +84,8 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
   formato, «fondos/participaciones», sin cuadre ni avisos, solo sus pestañas, ID/clave/copia guardados como `fondos-…` para no
   mezclarse con la del usuario). Si un cambio en `cartera.html` rompe un parche, el script se para y dice cuál. Tras tocar
   `cartera.html`, construye las dos (`construir.py` y `construir_hermano.py`) y publica `web/` entera en `gh-pages`.
+  **Cualquier cambio que afecte a su app (también solo en `construir_hermano.py`) debe subir `VER` en `cartera.html`**: su móvil
+  solo se recarga solo si `version.txt` cambia. Ya no hay acceso a su hoja: para probar, pide al usuario un Excel reciente
+  de la hoja del hermano (va a `mi-hoja/`, que no se sube). Su script no cambia salvo que use otra hoja (`HOJA_ID`).
   Su «Valor Cartera»/«Invertido» de Valor Mensual son solo los fondos (sin liquidez): la gráfica compara eso. Su hoja lleva
   pestañas ocultas copiadas de la plantilla del usuario (Trayectoria, Preselección…) con datos del usuario: la app no las lee.
