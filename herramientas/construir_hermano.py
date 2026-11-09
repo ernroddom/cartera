@@ -5,7 +5,7 @@
 # el script se para y dice cuál.
 # Lo que cambia respecto a la del usuario:
 #  1. Tres pestañas: Cartera (el Resumen), Aportaciones y Compras (las dos, de Movimientos). Sin cuadre ni avisos de la hoja.
-#  2. Lee el formato de su hoja: fondos por ISIN, «Participaciones», Cartera sin títulos Empresa/Ticker, «Var. %», «Rent.»…,
+#  2. Lee el formato de su hoja: fondos por ISIN, «Participaciones»/«Part.», Cartera sin títulos Empresa/Ticker, «Var. %», «Rent.»…,
 #     Valor Mensual con «Invertido» y sin MSCI World. Solo lee sus pestañas (no las ocultas que vienen de la plantilla).
 #  3. Habla de fondos y participaciones.
 #  4. Guarda su ID, su clave y su copia de datos con otros nombres: en un mismo móvil no se mezcla con la app del usuario.
@@ -47,7 +47,7 @@ cambia('''  const D = grid(wb,"Dashboard"), C = grid(wb,"Cartera"), V = grid(wb,
   const ren=(g,m)=>{ for(let r=0;r<Math.min(g.length,12);r++) (g[r]||[]).forEach((v,c)=>{ if(typeof v==="string"&&m[v.trim()]) g[r][c]=m[v.trim()]; }); return g; };
   const D = ren(grid(wb,"Dashboard"),{"Variación hoy":"Hoy"}), V = ren(grid(wb,"Valor Mensual"),{"Invertido":"Aportaciones"}),
         T = [], P = [], TX = ren(grid(wb,"Transacciones"),{"Participaciones":"Acciones"});
-  const C = ren(grid(wb,"Cartera"),{"Var. %":"Hoy","Rent.":"Revaloriz.","Rent. Tot.":"Total","Abs. Tot.":"Total €","IRR Tot.":"TIR"});
+  const C = ren(grid(wb,"Cartera"),{"Var. %":"Hoy","Part.":"Acc.","Rent.":"Revaloriz.","Rent. Tot.":"Total","Abs. Tot.":"Total €","IRR Tot.":"TIR"});
   // Cartera sin títulos encima del ISIN y del nombre: se ponen al ver la primera fila
   { const [h]=headerRow(C,["Precio","Valor","Acc.","Invertido"]); if(h>=0){ const row=C[h+1]||[], tc=row.findIndex(v=>typeof v==="string"&&/^[A-Z]{2}[A-Z0-9]{9}\\d$/.test(v.trim()));
       if(tc>=0){ C[h][tc]="Ticker"; if(C[h][tc+1]==null||C[h][tc+1]==="") C[h][tc+1]="Empresa"; } } }''')
