@@ -95,3 +95,11 @@ y puede que le falten partes (universo de candidatas, valoraciones, proyección�
   función `apuntarPrecios`, activada con `instalar`) cogiendo el precio de Cartera por el nombre del fondo. La app oculta la
   columna «Rent. div.» (no cobra dividendos). La TIR por fondo sale «—» hasta 6 meses en cartera: es a propósito. Su hoja lleva
   pestañas ocultas copiadas de la plantilla del usuario (Trayectoria, Preselección…) con datos del usuario: la app no las lee.
+- **Calendario (v429):** el agente semanal (`calendario/agente-calendario.md`, tarea programada de Claude los lunes) NO lee la
+  hoja: lee `empresas.json` (Universo, tickers de cartera y fechas de dividendos previstos, sin importes), que escribe cada
+  domingo el script del usuario (`apps-script/calendario.gs.ejemplo`, `instalarCalendario`). Carpeta «Calendario Cartera» en
+  el Drive del TRABAJO del usuario (el conector de Claude es esa cuenta), compartida con su Gmail. El agente añade a cada
+  empresa de cartera `dividendos` declarados (ex, pago, importe por acción, moneda); la web los empareja con los de la hoja
+  (±45 días), pinta su fecha e importe real (acciones a la fecha ex × importe × cambio) con ✓ y avisa si cambia el dividendo
+  por acción o la fecha («En tu hoja: …»), o si no está en la hoja.
+

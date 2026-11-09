@@ -1,0 +1,52 @@
+/* ===================== AÑADIR AL FINAL DE TU SCRIPT (calendario) =====================
+ * 1) En la parte de arriba de tu script, cambia la línea de CARPETA_CALENDARIO por:
+ *      const CARPETA_CALENDARIO = '<ID de la carpeta del calendario>';
+ * 2) Pega todo esto al final de Código.gs y guarda.
+ * 3) Ejecuta «instalarCalendario» una vez (acepta permisos): escribe ya empresas.json y deja programado
+ *    que se actualice cada domingo por la noche.
+ * 4) Implementar → Gestionar implementaciones → lápiz → Versión: Nueva versión → Implementar.
+ * Tu clave y tu ID no cambian.
+ */
+
+// Deja en la carpeta del calendario la lista de empresas para el agente: tu Universo, las de tu cartera y las fechas
+// de los dividendos que tienes previstos. Sin acciones ni importes.
+function exportarEmpresas() {
+  const libro = SpreadsheetApp.openById(HOJA_ID), TK = /^[A-Z]{2,7}:[A-Z0-9.\-]{1,10}$/;
+  const lista = pestana => {
+    const s = libro.getSheetByName(pestana); if (!s) return [];
+    const out = [], vistos = {};
+    s.getDataRange().getValues().forEach(fila => {
+      for (let c = 0; c < fila.length; c++) {
+        const v = String(fila[c]).trim();
+        if (!TK.test(v)) continue;
+        let nombre = null; for (let k = c - 1; k >= 0 && !nombre; k--) if (String(fila[k]).trim()) nombre = String(fila[k]).trim();
+        if (!vistos[v]) { vistos[v] = 1; out.push([nombre || v, v]); }
+        break;
+      }
+    });
+    return out;
+  };
+  const prev = [], div = libro.getSheetByName('Dividendos');
+  if (div) {
+    const V = div.getDataRange().getValues(); let h = -1;
+    for (let r = 0; r < Math.min(12, V.length) && h < 0; r++) if (V[r].indexOf('Fecha') >= 0 && V[r].indexOf('Ticker') >= 0) h = r;
+    if (h >= 0) {
+      const cf = V[h].indexOf('Fecha'), ct = V[h].indexOf('Ticker'), hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+      for (let r = h + 1; r < V.length; r++) {
+        const f = V[r][cf], t = String(V[r][ct]).trim();
+        if (f instanceof Date && f >= hoy && TK.test(t)) prev.push({ ticker: t, fecha: Utilities.formatDate(f, Session.getScriptTimeZone(), 'yyyy-MM-dd') });
+      }
+    }
+  }
+  const datos = { generado: new Date().toISOString(), universo: lista('Preselección'), cartera: lista('Cartera').map(x => x[1]), dividendos_previstos: prev };
+  const carpeta = DriveApp.getFolderById(CARPETA_CALENDARIO), texto = JSON.stringify(datos), fs = carpeta.getFilesByName('empresas.json');
+  if (fs.hasNext()) fs.next().setContent(texto); else carpeta.createFile('empresas.json', texto, 'application/json');
+  Logger.log('empresas.json: ' + datos.universo.length + ' del Universo, ' + datos.cartera.length + ' en cartera, ' + prev.length + ' dividendos previstos');
+}
+
+// Programa exportarEmpresas cada domingo a las 22 h y la ejecuta ya. Basta con ejecutarla una vez.
+function instalarCalendario() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'exportarEmpresas').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('exportarEmpresas').timeBased().onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(22).create();
+  exportarEmpresas();
+}

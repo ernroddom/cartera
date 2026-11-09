@@ -2520,6 +2520,9 @@ html.lmono[data-theme="dark"] :is(#paper.rvp,#s-calm) .lgb.kv img.kd{display:non
 .cal-e.d:hover{background:color-mix(in srgb,var(--pos) 22%,transparent)}
 .cal-e.d::before{background:var(--pos)}
 .cal-e.d .am{color:var(--pos);font-weight:600}
+/* v429 · dividendo confirmado por la empresa: una marca junto al importe y, si cambia, lo que ponía tu hoja */
+.cal-e.d.cf .am::before{content:"✓\00A0";font-weight:700}
+.cal-e .hj{display:block;margin-top:2px;font-size:var(--fs-11);font-weight:400;color:var(--ink3)}
 .cal-e .ic{display:inline-flex;align-items:center;gap:4px;flex:none;color:var(--ink2)}
 .ci{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
 .cal-lg{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;margin:12px 0 0;font-size:var(--fs-12);line-height:var(--lh-16);--lhp:var(--lh-16);color:var(--ink2)}
@@ -3825,7 +3828,7 @@ function trayProj(s){ const T=DATA.tray, h=DATA.horizon, cur=DATA.curYear, until
     const p=out[i-1], ini=p&&isNum(p.val)?p.val:0, g=r.y<=until&&isNum(r.divs)?r.divs:ini*s.dy, k=tax(g), re=s.stop===0||r.y<s.stop, val=ini*(1+s.growth)+s.saving+(re?g*(1-k):0);
     out.push({y:r.y, age:r.age, acc:(p&&isNum(p.acc)?p.acc:0)+s.saving, val, divs:g, net:g/12*(1-k), ti:ini?(val-s.saving)/ini-1:null, re}); });
   return out; }
-const VER="v428";   // la versión publicada, en el pie
+const VER="v429";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
@@ -5020,9 +5023,12 @@ const actNum=v=>{ const x=Number(v); return Number.isFinite(x)&&x>=0?Math.floor(
 const actIdOk=id=>typeof id==="string"&&/^[a-z0-9_-]{1,40}$/i.test(id);
 // v367 · el archivo del calendario: cada empresa con su ticker, nombre, últimos y próximos resultados; fechas AAAA-MM-DD; lo demás se descarta
 const calF=s=>typeof s==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(s)?s:null, calT=s=>typeof s==="string"?s.slice(0,80):"";
+// v429 · dividendos que la empresa ya ha anunciado (los busca el agente): fecha de pago, ex-dividendo, importe por acción y moneda
+const calDv=a=>Array.isArray(a)?a.filter(x=>x&&typeof x==="object"&&calF(x.pago)&&isNum(x.importe)&&x.importe>0).slice(0,12)
+  .map(x=>({pago:calF(x.pago),ex:calF(x.ex),importe:+x.importe,moneda:typeof x.moneda==="string"&&/^[A-Za-z]{3}$/.test(x.moneda)?x.moneda:"EUR"})):[];
 const calSanea=x=>({ix:{tipo:"calendario",semana:calF(x.ix.semana)||"",generado:typeof x.ix.generado==="string"?x.ix.generado.slice(0,40):"",
   empresas:x.ix.empresas.filter(e=>e&&typeof e==="object"&&typeof e.ticker==="string"&&e.ticker).map(e=>{ const u=e.ultimos&&typeof e.ultimos==="object"?e.ultimos:{}, p=e.proximos&&typeof e.proximos==="object"?e.proximos:{};
-    return {ticker:calT(e.ticker),nombre:calT(e.nombre),ultimos:{fecha:calF(u.fecha),periodo:calT(u.periodo)},proximos:{fecha:calF(p.fecha),periodo:calT(p.periodo),estado:p.estado==="confirmada"?"confirmada":"estimada",hora:p.hora==="antes de la apertura"||p.hora==="tras el cierre"?p.hora:""}}; })},emp:{}});
+    return {ticker:calT(e.ticker),nombre:calT(e.nombre),ultimos:{fecha:calF(u.fecha),periodo:calT(u.periodo)},proximos:{fecha:calF(p.fecha),periodo:calT(p.periodo),estado:p.estado==="confirmada"?"confirmada":"estimada",hora:p.hora==="antes de la apertura"||p.hora==="tras el cierre"?p.hora:""},dividendos:calDv(e.dividendos)}; })},emp:{}});
 const actSanea=x=>{ if(!x||typeof x!=="object"||!x.ix||typeof x.ix!=="object"||!Array.isArray(x.ix.empresas)) return null;
   if(x.ix.tipo==="calendario") return calSanea(x);
   const empresas=x.ix.empresas.filter(e=>e&&typeof e==="object"&&actIdOk(e.id)).map(e=>{ const z=e.noticias_por_nivel;
@@ -5600,7 +5606,7 @@ const calPer=p=>{ const s=String(p||""), v=/\bventas\b/i.test(s); let t=s.replac
 // el archivo del agente → CALT; si ha cambiado, Universo y la ficha vuelven a mirar «Por revisar»
 function calSync(){ const ok=ACT&&ACT.ix&&ACT.ix.tipo==="calendario", sig=ok?ACT.ix.semana+"|"+ACT.ix.generado:"";
   if(sig===calSig) return false; calSig=sig; CALT=new Map();
-  if(ok) ACT.ix.empresas.forEach(e=>CALT.set(e.ticker,{n:e.nombre,u:e.ultimos.fecha?calYmd(e.ultimos.fecha):null,up:e.ultimos.periodo,p:e.proximos.fecha?calYmd(e.proximos.fecha):null,pp:e.proximos.periodo,est:e.proximos.estado!=="confirmada",hora:e.proximos.hora}));
+  if(ok) ACT.ix.empresas.forEach(e=>CALT.set(e.ticker,{n:e.nombre,u:e.ultimos.fecha?calYmd(e.ultimos.fecha):null,up:e.ultimos.periodo,p:e.proximos.fecha?calYmd(e.proximos.fecha):null,pp:e.proximos.periodo,est:e.proximos.estado!=="confirmada",hora:e.proximos.hora,dv:e.dividendos||[]}));
   if(DATA){ drawn.preseleccion=null; if(view==="preseleccion") renderPre(); if(sheet) renderSheet(); }
   return true; }
 calSync();
@@ -5612,17 +5618,32 @@ function calEventos(){ const pf=new Set(DATA.pos.filter(p=>!p.isOption).map(p=>p
     if(c.p) ev.push({k:"r",d:c.p,t,n:nom(t),per:c.pp,est:c.est,hora:c.hora,pf:pf.has(t),ok:R,ya:false}); });
   const hk=calKey(calHoy());
   (DATA.dv||[]).forEach(r=>{ if(r.d instanceof Date&&isNum(r.gross)&&r.gross>0&&calKey(day(r.d))<hk) ev.push({k:"d",d:day(r.d),t:r.ticker,n:nom(r.ticker),v:r.gross,pf:true,ok:DATA.pre.some(x=>x.ticker===r.ticker)||pf.has(r.ticker),ya:true}); });
-  ((DATA.dvm&&DATA.dvm.pays)||[]).forEach(p=>{ if(p.d instanceof Date&&isNum(p.v)&&calKey(day(p.d))>=hk) ev.push({k:"d",d:day(p.d),t:p.t,n:nom(p.t),v:p.v,pf:true,ok:true,ya:false}); });
+  // v429 · un dividendo anunciado por la empresa manda sobre el de tu hoja (el mismo pago si cae a ±45 días): su fecha y tu
+  // importe real = acciones que tendrás en la fecha ex-dividendo × importe por acción × cambio a euros (bruto, como tu hoja)
+  const anun=[]; CALT.forEach((c,t)=>(c.dv||[]).forEach(a=>{ const pg=calYmd(a.pago); if(calKey(pg)<hk) return;
+    const ex=a.ex?calYmd(a.ex):pg, acc=sum(DATA.tx.filter(r=>r.ticker===t&&r.bd instanceof Date&&day(r.bd)<=ex&&!(r.sd&&day(r.sd)<=ex)),r=>r.shares||0), fx=(DATA.fx||{})[a.moneda];
+    if(acc>0) anun.push({t,d:pg,v:isNum(fx)?acc*a.importe*fx:null,ps:isNum(fx)?a.importe*fx:null,usado:false}); }));
+  ((DATA.dvm&&DATA.dvm.pays)||[]).forEach(p=>{ if(!(p.d instanceof Date)||!isNum(p.v)||calKey(day(p.d))<hk) return; const pd=day(p.d);
+    let m=null; anun.forEach(a=>{ if(!a.usado&&a.t===p.t&&Math.abs(a.d-pd)<=45*DIA_MS&&(!m||Math.abs(a.d-pd)<Math.abs(m.d-pd))) m=a; });
+    // ¿ha cambiado el dividendo por acción? (en euros los dos, para que no cuente el cambio de divisa ni libras/peniques)
+    if(m){ m.usado=true; const r=DATA.dv.find(x=>x.ticker===p.t&&x.d instanceof Date&&calKey(day(x.d))===calKey(pd)), fh=r?(DATA.fx||{})[r.cur]:null, ph=r&&isNum(r.dps)&&isNum(fh)?r.dps*fh:null;
+      ev.push({k:"d",d:m.d,t:p.t,n:nom(p.t),v:isNum(m.v)?m.v:p.v,pf:true,ok:true,ya:false,conf:true,hoja:p.v,hojaD:pd,sube:isNum(ph)&&isNum(m.ps)&&ph>0&&Math.abs(m.ps/ph-1)>0.005}); }
+    else ev.push({k:"d",d:pd,t:p.t,n:nom(p.t),v:p.v,pf:true,ok:true,ya:false}); });
+  anun.filter(a=>!a.usado&&isNum(a.v)).forEach(a=>ev.push({k:"d",d:a.d,t:a.t,n:nom(a.t),v:a.v,pf:true,ok:true,ya:false,conf:true,nuevo:true}));
   ev.forEach(e=>{ e.d=new Date(e.d.getFullYear(),e.d.getMonth(),e.d.getDate()); });
   // en cada día: 1 dividendos, 2 resultados de tu cartera, 3 resultados del Universo
   const rg=e=>e.k==="d"?0:e.pf?1:2;
   return ev.sort((a,b)=>a.d-b.d||rg(a)-rg(b)||a.n.localeCompare(b.n,"es")); }
 // sol, luna y fecha estimada (círculo de puntos), en la misma línea del periodo; con su nombre para el lector de pantalla
 const CAL_SOL=`<svg class="ci" viewBox="0 0 12 12" role="img" aria-label="Antes de la apertura"><title>Antes de la apertura</title><circle cx="6" cy="6" r="2.3"/><path d="M6 .9v1.3M6 9.8v1.3M.9 6h1.3M9.8 6h1.3M2.4 2.4l.9.9M8.7 8.7l.9.9M2.4 9.6l.9-.9M8.7 3.3l.9-.9"/></svg>`, CAL_LUNA=`<svg class="ci" viewBox="0 0 12 12" role="img" aria-label="Tras el cierre"><title>Tras el cierre</title><path d="M9.8 7.6A4.3 4.3 0 0 1 4.4 2.2a4.3 4.3 0 1 0 5.4 5.4z"/></svg>`, CAL_EST=`<svg class="ci" viewBox="0 0 12 12" role="img" aria-label="Fecha estimada"><title>Fecha estimada</title><path d="M3.9 4.2a2.1 2.1 0 1 1 3 1.9c-.6.3-.9.8-.9 1.4v.6" stroke-width="1.5"/><circle cx="6" cy="10.1" r=".95" fill="currentColor" stroke="none"/></svg>`;
+// v429 · en un dividendo confirmado, lo que ponía tu hoja si no coincide (dividendo por acción o fecha), o que no está en ella
+const calHoja=e=>{ if(e.nuevo) return `<span class="hj">No está en tu hoja</span>`; const x=[];
+  if(e.sube&&isNum(e.hoja)) x.push(eur(e.hoja,2)); if(e.hojaD&&calKey(e.hojaD)!==calKey(e.d)) x.push(fdate(e.hojaD));
+  return x.length?`<span class="hj">En tu hoja: ${x.join(" · ")}</span>`:""; };
 const calTarjeta=(e,hoy)=>{ const fut=calKey(e.d)>=calKey(hoy), det=e.k==="r"
     ?`<span class="dl"><span>${esc(calPer(e.per))}</span>${!e.ya&&(e.hora||e.est)?`<span class="ic">${e.hora==="antes de la apertura"?CAL_SOL:e.hora==="tras el cierre"?CAL_LUNA:""}${e.est?CAL_EST:""}</span>`:""}</span>`
-    :`<span class="dl"><span>${fut&&!e.ya?"Dividendo":"Cobrado"}</span><span class="am">${eur(e.v,2)}</span></span>`;
-  return `<button type="button" class="cal-e ${e.k}${e.pf?" pf":" cand"}${calKey(e.d)<calKey(hoy)?" past":""}"${e.ok?` data-t="${esc(e.t)}" data-pf="${e.pf?1:0}"`:" disabled"} title="${esc(e.n)} · ${e.k==="r"?esc(calPer(e.per)):(calKey(e.d)>=calKey(hoy)&&!e.ya?"Dividendo ":"Cobrado ")+esc(eur(e.v,2))}" aria-label="${esc(e.n)}: ${e.k==="r"?esc(calPer(e.per))+(!e.ya&&e.hora?", "+e.hora:"")+(!e.ya&&e.est?", fecha estimada":""):"dividendo de "+esc(eur(e.v,2))}"><span class="tp">${logoBare(e.n,e.t)}<b>${esc(e.n)}</b>${e.k==="d"?`<span class="mt am">${eur(e.v,0)}</span>`:!e.ya&&(e.hora||e.est)?`<span class="mt ic">${e.hora==="antes de la apertura"?CAL_SOL:e.hora==="tras el cierre"?CAL_LUNA:""}${e.est?CAL_EST:""}</span>`:""}</span><small>${det}</small></button>`; };
+    :`<span class="dl"><span>${fut&&!e.ya?(e.conf?"Confirmado":"Previsto"):"Cobrado"}</span><span class="am">${eur(e.v,2)}</span></span>${e.conf?calHoja(e):""}`;
+  return `<button type="button" class="cal-e ${e.k}${e.conf?" cf":""}${e.pf?" pf":" cand"}${calKey(e.d)<calKey(hoy)?" past":""}"${e.ok?` data-t="${esc(e.t)}" data-pf="${e.pf?1:0}"`:" disabled"} title="${esc(e.n)} · ${e.k==="r"?esc(calPer(e.per)):(calKey(e.d)>=calKey(hoy)&&!e.ya?(e.conf?"Dividendo confirmado ":"Dividendo previsto "):"Cobrado ")+esc(eur(e.v,2))}" aria-label="${esc(e.n)}: ${e.k==="r"?esc(calPer(e.per))+(!e.ya&&e.hora?", "+e.hora:"")+(!e.ya&&e.est?", fecha estimada":""):(e.conf?"dividendo confirmado de ":"dividendo de ")+esc(eur(e.v,2))}"><span class="tp">${logoBare(e.n,e.t)}<b>${esc(e.n)}</b>${e.k==="d"?`<span class="mt am">${eur(e.v,0)}</span>`:!e.ya&&(e.hora||e.est)?`<span class="mt ic">${e.hora==="antes de la apertura"?CAL_SOL:e.hora==="tras el cierre"?CAL_LUNA:""}${e.est?CAL_EST:""}</span>`:""}</span><small>${det}</small></button>`; };
 function renderCal(){ calSync(); const G=$("cal-g"); if(!G||!DATA) return;
   const hoy=calHoy(); if(!calM) calM=new Date(hoy.getFullYear(),hoy.getMonth(),1); if(!calSel) calSel=hoy;
   const todo=calEventos(), cart=todo.filter(e=>e.pf);
