@@ -3226,6 +3226,7 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
 .zband{--beige:#DCD3C4}
 @media (prefers-color-scheme:dark){html:not([data-theme="light"]) .zband{--beige:#4A443B}}
 html[data-theme="dark"] .zband{--beige:#4A443B}
+#mtabs,.hm5-mv,body.hm5on .hm5-mv{display:none!important}   /* v435: la franja de casillas sobra; lo dice la frase de arriba */
 .zmv{position:relative;margin-top:6px}
 .zmb{display:flex;align-items:stretch;position:relative}
 .zmc{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:stretch;position:relative}
@@ -3973,7 +3974,7 @@ function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) retu
   C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
 document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
 alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
-const VER="v434";   // la versión publicada, en el pie
+const VER="v435";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
