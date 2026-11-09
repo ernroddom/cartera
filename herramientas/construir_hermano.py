@@ -14,7 +14,7 @@
 import os, re, subprocess, sys, tempfile
 R = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 NOMBRE = "Cartera de Inversión"
-t = open(os.path.join(R, "fuente", "cartera.html"), encoding="utf-8").read()
+t = open(os.path.join(R, "fuente", "hermano-base.html"), encoding="utf-8").read()   # su app parte de la versión v429 de la del usuario (congelada: el diseño nuevo es solo para el usuario)
 
 def cambia(viejo, nuevo, todas=False, regex=False):
     global t
