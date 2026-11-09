@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-d85IAivWzEnDm94Tk1VtqWLeoOUwKF44ul7zI7rn2aQ=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-SuXLUaO2HPRrKvxhHCSCy3SkTIHWJZLQk++7K0prqQU=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3236,6 +3236,26 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
   .zgrid{gap:12px 8px} .ztile{height:54px} .ztile .zl{height:20px} .ztile .zl img{max-height:18px}
   .zb1.far,.zhoy.far{display:none} .zbars{gap:4px;height:170px}
 }
+/* v434 · Movimientos: barras de cada mes, arriba lo que entra y abajo lo que sale, con los hitos */
+.zband{--beige:#DCD3C4}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .zband{--beige:#4A443B}}
+html[data-theme="dark"] .zband{--beige:#4A443B}
+#mtabs,.hm5-mv,body.hm5on .hm5-mv{display:none!important}   /* v435: la franja de casillas sobra; lo dice la frase de arriba */
+.zmv{position:relative;margin-top:6px}
+.zmb{display:flex;align-items:stretch;position:relative}
+.zmc{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:stretch;position:relative}
+.zmc.yr::before{content:"";position:absolute;left:-1px;top:0;bottom:-26px;border-left:1px solid var(--line)}
+.zmu{display:flex;align-items:flex-end;border-bottom:1px solid var(--g4)} .zmu i{display:block;width:64%;margin:0 auto;background:var(--bar-dark)}
+.zmd{display:flex;align-items:flex-start} .zmd i{display:block;width:64%;margin:0 auto;background:var(--beige)}
+.zmy{position:absolute;left:0;bottom:-26px;font-size:var(--fs-10);color:var(--ink3);white-space:nowrap}
+.zmv{padding-bottom:30px}
+.zmh{position:absolute;top:0;font-size:var(--fs-10);line-height:1.3;white-space:nowrap;pointer-events:none;color:var(--ink3)}
+.zmh b{display:block;font-weight:600;color:var(--ink)} .zmh.r{transform:translateX(-100%);text-align:right}
+.zmh .zml{position:absolute;left:0;top:34px;border-left:1px dashed var(--g4)} .zmh.r .zml{left:auto;right:0}
+.zmh .zmdot{position:absolute;left:-4px;width:8px;height:8px;border-radius:50%;background:var(--mint)} .zmh.r .zmdot{left:auto;right:-4px}
+.zmc:hover .zmu i,.zmc:hover .zmd i{opacity:.75}
+@media (max-width:700.98px){ .zmu i,.zmd i{width:72%} .zmh{font-size:9.5px} }
+
 </style>
 
 <div class="wrap">
@@ -3360,6 +3380,7 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
 
   <!-- Movimientos -->
   <div class="view" id="v-movimientos" hidden>
+  <section class="zband" id="s-mh" aria-label="Tus movimientos"><h1 class="zh" id="mh-h"></h1><div class="zmv" id="mh-c"></div></section>
   <nav class="mvt" id="mtabs" aria-label="Movimientos">
     <a href="#todo" data-t="todo" class="mvt-all"><span class="mvt-n">Movimientos<em></em></span><b class="mvt-v num" id="mt-all"></b><span class="mvt-s">en total</span></a>
     <a href="#transacciones" data-t="transacciones"><span class="mvt-n">Transacciones<em></em></span><b class="mvt-v num" id="mt-tx"></b><span class="mvt-s">resultado</span></a>
@@ -3928,7 +3949,46 @@ function renderDvHead(){ const d=DATA, H=$("dv-h"), B=$("dv-b"); if(!d||!H||!B||
   const mx=Math.max(1,...M.map(x=>x.p+x.s));
   B.innerHTML=M.map(x=>{ const y=Math.floor(x.k/12), m=x.k%12, v=x.p+x.s, h=Math.round(v/mx*120), far=x.off<-5||x.off>6?" far":"";
     return `${x.off===0?`<div class="zhoy${far}" aria-hidden="true"><span>hoy</span></div>`:""}<div class="zb1${far}${x.off<0?" ya":""}" title="${MESL[m]} ${y}: ${eur(v)}"><span class="zv num">${v?nf(0).format(Math.round(v)):""}</span><span class="zbar" style="height:${h}px">${x.s?`<i class="sc" style="flex:${x.s}"></i>`:""}${x.p?`<i class="pd" style="flex:${x.p}"></i>`:""}</span><span class="zm">${MES[m].toLowerCase()}</span><span class="zy">${m===0||x.off===-11||x.off===-5?y:""}</span></div>`; }).join(""); }
-const VER="v433";   // la versión publicada, en el pie
+// v434 · Movimientos: la frase («652 movimientos ▾ en 3,5 años») y las barras de cada mes (lo que entra arriba, en oscuro;
+// lo que sale abajo, en beige), con los hitos de lo aportado. El desplegable cambia la pestaña de abajo
+const MH_TIPOS=[["todo","movimientos","movimiento"],["transacciones","compras y ventas","compra o venta"],["dividendos","dividendos","dividendo"],["aportaciones","aportaciones","aportación"],["ajustes","ajustes","ajuste"]];
+function mhMil(v){ return v>=1e6?`${nf(v%1e6?1:0).format(v/1e6)} ${v===1e6?"millón":"millones"}`:v>=1e3?`${nf(v%1e3?1:0).format(v/1e3)} mil`:nf(0).format(v)+" €"; }
+function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) return;
+  const t=MOV[mtab]?mtab:"todo", all=movAll();
+  const pick={todo:()=>all, transacciones:()=>all.filter(r=>r.ty==="Compra"||r.ty==="Venta"), dividendos:()=>all.filter(r=>r.dv),
+    aportaciones:()=>all.filter(r=>r.g==="in"||r.g==="out"), ajustes:()=>all.filter(r=>r.g==="adj")}[t];
+  const rs=pick(), up=r=>r.ty==="Venta"||r.dv||r.g==="in"||(r.g==="adj"&&r.v>0), n=rs.length, ti=MH_TIPOS.find(x=>x[0]===t);
+  const sel=zSel("mh-sel",t,MH_TIPOS.map(x=>[x[0],x[0]===t&&n===1?x[2]:x[1]]));
+  const hoy=new Date(), f0=rs.length?rs.reduce((m,r)=>r.d<m?r.d:m,rs[0].d):null, yrs=f0?(hoy-f0)/(365.25*864e5):0;
+  const span=!f0?"":yrs>=1?` en ${nf(yrs%1<0.05||yrs%1>0.95?0:1).format(yrs)} ${Math.round(yrs*10)===10?"año":"años"}`:(()=>{ const m=Math.max(1,Math.round(yrs*12)); return ` en ${m} ${m===1?"mes":"meses"}`; })();
+  const k=d.kpi||{}, cy=hoy.getFullYear();
+  const l2=t==="transacciones"?(()=>{ const b=sum(rs.filter(r=>r.ty==="Compra"),r=>r.v), v=sum(rs.filter(r=>r.ty==="Venta"),r=>r.v), pl=sum(rs.filter(r=>r.ty==="Venta"),r=>r.pnl||0);
+        return v?`Has comprado por ${eur(b)} y vendido por ${eur(v)}, con un resultado de ${seur(pl)}.`:`Has comprado por ${eur(b)} y aún no has vendido.`; })()
+    :t==="dividendos"?`Has cobrado ${eur(sum(rs,r=>r.v))} brutos; este año, ${eur(sum(rs.filter(r=>yr(r.d)===cy),r=>r.v))}.`
+    :t==="ajustes"?`Suman ${seur(sum(rs,r=>r.v))}.`
+    :`Has aportado ${eur(k.aport||0)} y hoy la cartera vale ${eur(k.value||0)}.`;
+  H.innerHTML=`${nf(0).format(n)} ${sel}${span}.<span class="zs">${l2}</span>`;
+  if(!f0){ C.innerHTML=""; return; }
+  const mk=x=>{ const q=day(x); return q.getFullYear()*12+q.getMonth(); }, k0=mk(f0), k1=Math.max(mk(hoy),...rs.map(r=>mk(r.d)).filter(x=>x<=mk(hoy))), N=k1-k0+1;
+  const M=[...Array(N)].map((_,i)=>({k:k0+i,u:0,w:0}));
+  rs.forEach(r=>{ const i=mk(r.d)-k0; if(i<0||i>=N) return; const v=Math.abs(r.v||0); if(up(r)) M[i].u+=v; else M[i].w+=v; });
+  // hitos: el primer movimiento y cada tramo redondo de lo aportado (o cobrado, o comprado)
+  const hk={todo:["in","aportados"],aportaciones:["in","aportados"],dividendos:["dv","cobrados"],transacciones:["buy","comprados"]}[t], hitos=[{i:0,l:t==="dividendos"?"Primer cobro":t==="aportaciones"?"Primera aportación":t==="ajustes"?"Primer ajuste":t==="transacciones"?"Primera compra":"Primer movimiento"}];
+  if(hk){ const val=r=>hk[0]==="in"?(r.g==="in"||r.g==="out"?r.v:0):hk[0]==="dv"?(r.dv?r.v:0):(r.ty==="Compra"?r.v:0);
+    const acc=M.map(()=>0); [...rs].sort((a,b)=>a.d-b.d).forEach(r=>{ const i=mk(r.d)-k0; if(i>=0&&i<N) acc[i]+=+val(r)||0; });
+    let c=0; const cum=acc.map(v=>c+=v), tot=c, st=[1e3,2.5e3,5e3,1e4,2.5e4,5e4,1e5,2.5e5,5e5,1e6,2.5e6].find(x=>tot/x<=4)||1e7;
+    for(let h=st;h<=tot;h+=st){ const i=cum.findIndex(v=>v>=h-0.5); if(i>0) hitos.push({i,l:`${mhMil(h)} ${hk[1]}`}); } }
+  const narrow=matchMedia("(max-width:700.98px)").matches, gap=narrow?30:12, keep=[];
+  hitos.forEach(h=>{ const x=(h.i+.5)/N*100; if(!keep.length||x-keep[keep.length-1].x>=gap) keep.push({...h,x}); else if(h===hitos[hitos.length-1]&&keep.length>1){ keep[keep.length-1]={...h,x}; } });
+  const mu=Math.max(0,...M.map(x=>x.u)), md=Math.max(0,...M.map(x=>x.w)), HT=narrow?150:190, sc=(mu+md)?HT/(mu+md):0, Hu=Math.round(mu*sc), Hd=Math.round(md*sc), LT=48;
+  const cols=M.map((x,i)=>{ const y=Math.floor(x.k/12), m=x.k%12;
+    return `<div class="zmc${m===0&&i>0?" yr":""}" title="${MESL[m]} ${y}${x.u?` · entra ${eur(x.u)}`:""}${x.w?` · sale ${eur(x.w)}`:""}"><span class="zmu" style="height:${Hu}px"><i style="height:${Math.round(x.u*sc)}px"></i></span><span class="zmd" style="height:${Hd}px"><i style="height:${Math.round(x.w*sc)}px"></i></span>${m===0||(i===0&&m<=8)?`<span class="zmy">${y}</span>`:""}</div>`; }).join("");
+  const hs=keep.map(h=>{ const x=M[h.i], yy=Math.floor(x.k/12), mm=x.k%12, top=LT+Hu-Math.round(x.u*sc), r=h.x>78;
+    return `<div class="zmh${r?" r":""}" style="left:${h.x}%"><b>${esc(h.l)}</b><span>${MES[mm].toLowerCase()} ${yy}</span><i class="zml" style="height:${top-34}px"></i><i class="zmdot" style="top:${top-4}px"></i></div>`; }).join("");
+  C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
+document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
+alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
+const VER="v435";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
@@ -4153,7 +4213,7 @@ function render(d){
 
     renderPositions();
 
-  renderReparto(); renderAidx(); renderAh(); renderDvHead(); renderAct();
+  renderReparto(); renderAidx(); renderAh(); renderDvHead(); renderMh(); renderAct();
 
   const dm=d.dvm, yTot=dm.paidY+dm.schedY;
   const cg=(d.div&&d.div.cagr)||{};
@@ -4605,7 +4665,7 @@ function movRows(noState,noYear){ const c=MOV[mtab], q=fold($("m-q").value.trim(
   return c.rows().filter(r=>(!q||fold(c.text(r)).includes(q)) && (!y||c.years(r).includes(y)) && (!b||r.broker===b)
     && (noState||!c.states||!st||c.stateFn(r,st))); }
 function renderMov(refill){
-  const c=MOV[mtab], all=c.rows();
+  const c=MOV[mtab], all=c.rows(); renderMh();
   document.querySelectorAll("#mtabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.t===mtab?"page":"false")); $("s-mov").dataset.t=mtab;
   if(refill!==false&&DATA) drawn.movimientos=stampOf("movimientos");
   if(refill!==false){ opts($("m-year"),[...new Set(all.flatMap(c.years).filter(Boolean))].sort((a,b)=>b-a),"Año: todos",true);
