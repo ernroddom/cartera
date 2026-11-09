@@ -3184,6 +3184,46 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
   --lv0:#2A2926;--lp1:#25302A;--lp1t:#D9E8DE;--lp2:#2C3B32;--lp2t:#DCEBE1;--lp3:#35493D;--lp3t:#E2EFE6;--lp4:#405A4A;--lp4t:#EAF4EE;--lp5:#4C6B57;--lp5t:#F2F9F4;
   --ln1:#382B29;--ln1t:#F3DCD8;--ln2:#45302D;--ln2t:#F3DCD8;--ln3:#553833;--ln3t:#F6E1DD;--ln4:#66413B;--ln4t:#FAE8E5;--ln5:#784A43;--ln5t:#FDF0EE;
   --hm-g:#2E4237;--hm-r:#4A302D}
+/* v431 · franjas de la web nueva: blanca a todo lo ancho, con una frase grande que resume (y un ▾ para cambiar lo que se mira) */
+.zband{background:var(--band);margin:0 calc(50% - 50vw) var(--gap);padding:44px calc(50vw - 50%) 40px}
+.zband>*{max-width:1180px}
+.zh{margin:0 0 26px;font-size:28px;font-weight:600;letter-spacing:-.015em;line-height:1.25;color:var(--ink);max-width:860px}
+.zh .zs{display:block;color:var(--ink3);font-weight:500}
+.zh2{font-size:22px;margin-bottom:22px}
+.zsel{position:relative;display:inline-block;white-space:nowrap;border-bottom:2px solid var(--mint);line-height:1.1}
+.zsel select{position:absolute;inset:0;width:100%;opacity:0;cursor:pointer;font-size:16px;border:0}
+.zsel .zch{width:.5em;height:.5em;margin-left:2px;vertical-align:.12em;color:var(--ink3)}
+.zgrid{display:flex;flex-wrap:wrap;gap:16px 10px}
+.zgrp{display:flex;flex-direction:column;min-width:0}
+.zgt{display:flex;gap:3px;border-bottom:2px solid var(--ink2)}
+.ztile{min-width:0;height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:6px 4px;border:0;background:var(--row);cursor:pointer;color:var(--ink)}
+.ztile:hover{background:color-mix(in srgb,var(--ink) 6%,var(--row))}
+.ztile .zl{height:24px;max-width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ztile .zl .lgb{max-height:24px}
+.ztile .zl img{max-height:22px;max-width:100%;object-fit:contain}
+.ztile .zp{font-size:var(--fs-10);color:var(--ink3)}
+.zgl{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:var(--fs-11);color:var(--ink2);min-width:0;white-space:nowrap}
+.zgl .zn{min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) #ah-g .lgb.dk img{filter:brightness(0) invert(.86)} html:not([data-theme="light"]) #ah-g .lgb.dk.fino img{filter:brightness(0) invert(1)}}
+html[data-theme="dark"] #ah-g .lgb.dk img{filter:brightness(0) invert(.86)} html[data-theme="dark"] #ah-g .lgb.dk.fino img{filter:brightness(0) invert(1)} .zgl>.num,.zgl .flag{flex:none}
+.zgl .num{color:var(--ink3)} .zgl .flag{width:12px;height:12px}
+#s-aidx{display:none!important}
+/* barras de dividendos por mes */
+#v-analisis{--accent:var(--bar-dark);--acc-pd:var(--mint);--ps-bg:var(--mint)}
+.zbars{display:flex;align-items:flex-end;gap:6px;height:190px;padding:0 0 4px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+.zb1{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.zbar{width:100%;max-width:28px;display:flex;flex-direction:column;border-radius:2px 2px 0 0;overflow:hidden;min-height:0}
+.zbar .pd{background:var(--bar-dark)} .zbar .sc{background:var(--mint)}
+.zv{font-size:10px;color:var(--ink2);margin-bottom:4px;white-space:nowrap}
+.zm{font-size:10px;color:var(--ink3);margin-top:6px} .zy{font-size:10px;color:var(--ink3);height:14px}
+.zhoy{align-self:stretch;position:relative;width:0;border-left:1px dashed var(--g4);margin-bottom:34px}
+.zhoy span{position:absolute;top:0;left:5px;font-size:10px;color:var(--ink3)}
+@media (max-width:700.98px){
+  .zband{padding:calc(max(env(safe-area-inset-top,0px),10px) + 22px) calc(50vw - 50%) 28px}
+  .zh{font-size:22px;margin-bottom:20px} .zh2{font-size:19px}
+  .zgrid{gap:12px 8px} .ztile{height:54px} .ztile .zl{height:20px} .ztile .zl img{max-height:18px}
+  .zb1.far,.zhoy.far{display:none} .zbars{gap:4px;height:170px}
+}
 </style>
 
 <div class="wrap">
@@ -3264,16 +3304,17 @@ details.chk>summary>.chk-fin{display:flex;align-items:center;gap:8px}
   <!-- Análisis: lo que se consulta de vez en cuando -->
   <div class="view" id="v-analisis" hidden>
   <!-- Índice: una cifra de cada bloque; al pulsarla, lleva a él -->
+  <!-- v431 · franja con la frase y los logos agrupados por industria, país o divisa -->
+  <section class="zband" id="s-ah" aria-label="Reparto de tu cartera"><h1 class="zh" id="ah-h"></h1><div class="zgrid" id="ah-g"></div></section>
   <section class="panel hero3 band2" id="s-aidx" aria-label="Índice de Análisis"><div class="bg ag bg5" id="a-k"></div></section>
   <!-- Dividendos -->
   <section class="panel" id="s-divs">
-    <div class="chart-head"><div><h2 class="st">Dividendos</h2></div></div>
-    <div class="dv-top" id="dv-top"></div>
-    <div class="dv-cal"><div class="dv-h"><span>Próximos 12 meses</span></div><div class="cal-wrap"><div class="cal" id="cal"></div></div></div>
+    <h2 class="zh zh2" id="dv-h"></h2><div class="zbars" id="dv-b"></div>
+    <div hidden><div class="dv-top" id="dv-top"></div><div class="cal" id="cal"></div></div>
     <div class="dv3">
-      <div><div class="dv-h"><span>Mayores pagadores al año</span></div><div class="bars" id="b-payers"></div></div>
+      <div><div class="dv-h"><span>Quién te paga más al año</span></div><div class="bars" id="b-payers"></div></div>
       <div><div class="dv-h"><span>Próximos cobros</span></div><div class="mcal" id="pays"></div></div>
-      <div><div class="dv-h"><span>Historial por año</span></div><div class="chartbox sm"><canvas id="c-year" role="img" aria-label="Dividendos por año"></canvas></div><div class="legend leg-c"><span style="--c:var(--accent)"><i class="barra"></i>Cobrado</span><span style="--c:var(--acc-pd)"><i class="barra"></i>Previsto</span></div></div>
+      <div><div class="dv-h"><span>Cada año</span></div><div class="chartbox sm"><canvas id="c-year" role="img" aria-label="Dividendos por año"></canvas></div><div class="legend leg-c"><span style="--c:var(--accent)"><i class="barra"></i>Cobrado</span><span style="--c:var(--acc-pd)"><i class="barra"></i>Previsto</span></div></div>
     </div>
   </section>
 
@@ -3819,10 +3860,10 @@ function drawEvo(){
 }
 const hexTok=n=>{ const v=varCss(n); return /^#[0-9a-f]{6}$/i.test(v)?v:"#888888"; };
 function drawDivs(){
-  if(!DATA||!DATA.dvm) return; const dm=DATA.dvm, pd=varCss("--acc-pd"), soft=/^#[0-9a-f]{6}$/i.test(pd)?pd:hexTok("--accent")+"59";
+  if(!DATA||!DATA.dvm) return; const dm=DATA.dvm, pd=varCss("--mint"), soft=/^#[0-9a-f]{6}$/i.test(pd)?pd:hexTok("--accent")+"59";
   const opt=()=>{ const o=baseOpts(); o.scales.x.stacked=true; o.scales.y.stacked=true; o.scales.y.ticks.callback=v=>nf(0).format(v)+" €";
     o.plugins.tooltip.filter=i=>i.parsed.y>0; o.plugins.tooltip.callbacks={label:c=>" "+c.dataset.label+": "+eur(c.parsed.y,2)}; return o; };
-  const ds=(rows)=>[{label:"Cobrado",data:rows.map(x=>x.paid),backgroundColor:hexTok("--accent"),maxBarThickness:30},
+  const ds=(rows)=>[{label:"Cobrado",data:rows.map(x=>x.paid),backgroundColor:hexTok("--bar-dark"),maxBarThickness:30},
     {label:"Previsto",data:rows.map(x=>x.sched),backgroundColor:soft,borderRadius:{topLeft:4,topRight:4},maxBarThickness:30}];
   { const o=opt(); o.scales.x.ticks.autoSkip=false; make("c-year",{type:"bar",data:{labels:dm.years.map(x=>x.y),datasets:ds(dm.years)},options:o}); }
 }
@@ -3844,7 +3885,38 @@ function trayProj(s){ const T=DATA.tray, h=DATA.horizon, cur=DATA.curYear, until
     const p=out[i-1], ini=p&&isNum(p.val)?p.val:0, g=r.y<=until&&isNum(r.divs)?r.divs:ini*s.dy, k=tax(g), re=s.stop===0||r.y<s.stop, val=ini*(1+s.growth)+s.saving+(re?g*(1-k):0);
     out.push({y:r.y, age:r.age, acc:(p&&isNum(p.acc)?p.acc:0)+s.saving, val, divs:g, net:g/12*(1-k), ti:ini?(val-s.saving)/ini-1:null, re}); });
   return out; }
-const VER="v430";   // la versión publicada, en el pie
+// v431 · Análisis: la frase de arriba y los logos agrupados (por industria, país o divisa, a elegir en la frase)
+let ahDim=(()=>{ try{ const v=localStorage.getItem("ah-dim"); return ["ind","pais","div"].includes(v)?v:"ind"; }catch{ return "ind"; } })();
+const CURW={EUR:"el euro",USD:"el dólar",GBP:"la libra",GBX:"la libra",CHF:"el franco suizo",JPY:"el yen",CAD:"el dólar canadiense",AUD:"el dólar australiano",HKD:"el dólar de Hong Kong",DKK:"la corona danesa",SEK:"la corona sueca",NOK:"la corona noruega",PLN:"el esloti",CNY:"el yuan",TWD:"el dólar taiwanés",BRL:"el real"};
+const zCap=s=>s?s[0].toUpperCase()+s.slice(1):s, zChev=`<svg class="zch" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const zSel=(id,v,ops)=>`<span class="zsel"><span class="zsel-t">${esc(ops.find(o=>o[0]===v)[1])}${zChev}</span><select id="${id}" aria-label="Cambiar">${ops.map(([k,l])=>`<option value="${k}"${k===v?" selected":""}>${esc(l)}</option>`).join("")}</select></span>`;
+function renderAh(){ const d=DATA, H=$("ah-h"), G=$("ah-g"); if(!d||!H||!G) return;
+  const ps=d.pos.filter(p=>!p.isOption&&p.value>0), tot=sum(ps,p=>p.value)||1, n=ps.length;
+  const key={ind:p=>(p.meta&&p.meta.ind)||"Sin industria",pais:p=>(p.meta&&p.meta.country)||"Sin país",div:p=>p.cur==="GBX"?"GBP":(p.cur||"EUR")}[ahDim];
+  const gm=new Map(); ps.forEach(p=>{ const k=key(p); if(!gm.has(k)) gm.set(k,[]); gm.get(k).push(p); });
+  const gs=[...gm].map(([k,l])=>({k,l:l.sort((a,b)=>b.value-a.value),w:sum(l,p=>p.value)/tot})).sort((a,b)=>b.w-a.w), K=gs.length;
+  const nm=k=>ahDim==="ind"?k.toLowerCase():ahDim==="pais"?ctryN(k):(CURW[k]||k), et=k=>ahDim==="pais"?ctryN(k):ahDim==="div"?zCap(CURN[k]||(k==="EUR"?"euro":k)):k;
+  const sel=zSel("ah-sel",ahDim,[["ind",K===1?"industria":"industrias"],["pais",K===1?"país":"países"],["div",K===1?"divisa":"divisas"]]);
+  const l1=ahDim==="div"?`Tus ${n} empresas cotizan en ${K} ${sel} ${K===1?"":"distintas"}.`:`Tus ${n} empresas se reparten en ${K} ${sel} ${K===1?"":ahDim==="pais"?"distintos":"distintas"}.`;
+  const g0=gs[0], g1=gs[1], eu=(gm.get("EUR")?sum(gm.get("EUR"),p=>p.value)/tot:0);
+  const l2=!g0?"":ahDim==="div"?`${zCap(nm(g0.k))}, el ${pct(g0.w,0)}${eu<1?`; fuera del euro, el ${pct(1-eu,0)}`:""}.`
+    :K>5?`${ahDim==="pais"?"Los cinco mayores":"Las cinco mayores"} pesan el ${pct(sum(gs.slice(0,5),g=>g.w),0)}; ${esc(nm(g0.k))}, el ${pct(g0.w,0)}.`
+    :`${esc(zCap(nm(g0.k)))}, el ${pct(g0.w,0)}${g1?`; ${esc(nm(g1.k))}, el ${pct(g1.w,0)}`:""}.`;
+  H.innerHTML=`${l1.replace(/\s+\./,".")}<span class="zs">${l2}</span>`;
+  G.innerHTML=gs.map(g=>`<div class="zgrp" style="flex:${(g.w*100).toFixed(3)} 1 ${Math.max(g.l.length*56,Math.round(g.w*720))}px"><div class="zgt">${g.l.map(p=>`<button type="button" class="ztile" data-t="${esc(p.ticker)}" style="flex:${(p.value/tot*100).toFixed(3)} 1 52px" title="${esc(p.name)} · ${pct(p.value/tot,1)}"><span class="zl">${logoBare(p.name,p.ticker)}</span><span class="zp num">${pct(p.value/tot,1)}</span></button>`).join("")}</div><div class="zgl">${ahDim==="pais"?flagHtml(g.k):""}<span class="zn" title="${esc(et(g.k))}">${esc(et(g.k))}</span><span class="num">${pct(g.w,1)}</span></div></div>`).join(""); }
+document.addEventListener("change",e=>{ if(e.target.id!=="ah-sel") return; ahDim=e.target.value; try{ localStorage.setItem("ah-dim",ahDim); }catch{} renderAh(); });
+$("ah-g").addEventListener("click",e=>{ const b=e.target.closest(".ztile"); if(b) openSheet("pos",b.dataset.t,[...$("ah-g").querySelectorAll(".ztile")].map(x=>x.dataset.t)); });
+// v431 · Dividendos: la frase y las barras de 24 meses (el año pasado cobrado, en oscuro; el que viene previsto, en menta)
+function renderDvHead(){ const d=DATA, H=$("dv-h"), B=$("dv-b"); if(!d||!H||!B||!d.dvm) return; const dm=d.dvm;
+  const paid=d.dv.filter(d.isPaid), y0=paid.length?Math.min(...paid.map(r=>day(r.d).getFullYear())):null, yT=dm.paidY+dm.schedY;
+  H.innerHTML=`${eur(dm.paidY)} cobrados este año${yT?`, el ${pct(dm.paidY/yT,0)} de lo previsto`:""}${y0?`, y ${eur(dm.paidAll)} desde ${y0}`:""}.<span class="zs">Rinden un ${pct(dm.yoc,2)} sobre lo invertido y un ${pct(dm.yov,2)} sobre el valor actual.</span>`;
+  const hoy=new Date(), m0=hoy.getFullYear()*12+hoy.getMonth(), mk=x=>{ const t=day(x); return t.getFullYear()*12+t.getMonth(); };
+  const M=[...Array(24)].map((_,i)=>{ const k=m0-11+i, rs=d.dv.filter(r=>r.d instanceof Date&&mk(r.d)===k&&isNum(r.gross));
+    return {k,off:k-m0,p:sum(rs.filter(d.isPaid),r=>r.gross),s:sum(rs.filter(r=>!d.isPaid(r)),r=>r.gross)}; });
+  const mx=Math.max(1,...M.map(x=>x.p+x.s));
+  B.innerHTML=M.map(x=>{ const y=Math.floor(x.k/12), m=x.k%12, v=x.p+x.s, h=Math.round(v/mx*120), far=x.off<-5||x.off>6?" far":"";
+    return `${x.off===0?`<div class="zhoy${far}" aria-hidden="true"><span>hoy</span></div>`:""}<div class="zb1${far}${x.off<0?" ya":""}" title="${MESL[m]} ${y}: ${eur(v)}"><span class="zv num">${v?nf(0).format(Math.round(v)):""}</span><span class="zbar" style="height:${h}px">${x.s?`<i class="sc" style="flex:${x.s}"></i>`:""}${x.p?`<i class="pd" style="flex:${x.p}"></i>`:""}</span><span class="zm">${MES[m].toLowerCase()}</span><span class="zy">${m===0||x.off===-11||x.off===-5?y:""}</span></div>`; }).join(""); }
+const VER="v432";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
@@ -4069,7 +4141,7 @@ function render(d){
 
     renderPositions();
 
-  renderReparto(); renderAidx(); renderAct();
+  renderReparto(); renderAidx(); renderAh(); renderDvHead(); renderAct();
 
   const dm=d.dvm, yTot=dm.paidY+dm.schedY;
   const cg=(d.div&&d.div.cagr)||{};
