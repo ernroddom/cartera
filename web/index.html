@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-AHjC4opBPhJVOZq95nOaoK3dZzMoMPE/HqHXPCFtQpo=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yLvfPRXlLVzfsSyKtfQqPmP3Fb7E+OUwSPtOQ7WZB38=' 'sha256-/6yMdZKUchE320UAzj5V2tqSPGpojTeHKkwXtYfJIlM=' 'self'; worker-src blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -3333,6 +3333,9 @@ html.lmono .zdl .lgb:not(.gr) img{filter:brightness(0) opacity(.82)}
 html.lmono[data-theme="dark"] .zdl .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
 @media (max-width:700.98px){ .ztm{grid-template-columns:1fr;gap:16px} .zsw{padding-left:34px} .zsy{width:28px} .zsg{gap:6px} .zdot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px} .zdl{width:44px;height:16px} .zdl .lgb{height:14px} }
 
+/* v438 · en el PC, todo en una columna centrada y más estrecha, como la web de tu amigo */
+@media (min-width:1181px){.wrap{max-width:1100px}}
+
 </style>
 
 <div class="wrap">
@@ -4069,7 +4072,7 @@ function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) retu
   C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
 document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
 alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
-const VER="v437";   // la versión publicada, en el pie
+const VER="v438";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día

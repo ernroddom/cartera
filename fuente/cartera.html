@@ -3319,6 +3319,9 @@ html.lmono .zdl .lgb:not(.gr) img{filter:brightness(0) opacity(.82)}
 html.lmono[data-theme="dark"] .zdl .lgb:not(.gr) img{filter:brightness(0) invert(.86)}
 @media (max-width:700.98px){ .ztm{grid-template-columns:1fr;gap:16px} .zsw{padding-left:34px} .zsy{width:28px} .zsg{gap:6px} .zdot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px} .zdl{width:44px;height:16px} .zdl .lgb{height:14px} }
 
+/* v438 · en el PC, todo en una columna centrada y más estrecha, como la web de tu amigo */
+@media (min-width:1181px){.wrap{max-width:1100px}}
+
 </style>
 
 <div class="wrap">
@@ -4055,7 +4058,7 @@ function renderMh(){ const d=DATA, H=$("mh-h"), C=$("mh-c"); if(!d||!H||!C) retu
   C.innerHTML=`<div class="zmhs" style="height:${LT}px"></div><div class="zmb" style="--hu:${Hu}px">${cols}</div>${hs}`; }
 document.addEventListener("change",e=>{ if(e.target.id!=="mh-sel") return; navega(e.target.value,true); });
 alCambiar("(max-width:700.98px)",()=>{ if(DATA) renderMh(); });
-const VER="v437";   // la versión publicada, en el pie
+const VER="v438";   // la versión publicada, en el pie
 // supuestos de Trayectoria: empiezan en los de tu hoja; moverlos solo cambia lo que ves aquí, nunca tu hoja
 let traySup=null, traySup0=null, trayRaf=0, trayArrastre=false, trayPendiente=false;
 // COD-14: mientras arrastras un deslizador, la recarga no lo sustituye; al soltarlo, se pone al día
