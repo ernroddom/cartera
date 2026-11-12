@@ -1,5 +1,5 @@
 /**
- * Script de la app «Cartera de Inversión» (versión 2: con la pestaña Índices). Pon el ID de su hoja en HOJA_ID (lo que va entre /d/ y /edit en su dirección).
+ * Script de la app «Cartera de Inversión» (versión 3: con la pestaña Índices). Pon el ID de su hoja en HOJA_ID (lo que va entre /d/ y /edit en su dirección).
  * - Entrega la hoja a la app (con la clave, que se crea sola y se guarda dentro del proyecto; no está escrita aquí).
  * - Cada día apunta en la pestaña «Índices» el precio de los fondos que no salen en Google Finance (Cobas y Numantia):
  *   coge el precio de la pestaña Cartera y lo añade debajo, en el bloque cuyo título coincide con el nombre del fondo.
@@ -33,11 +33,13 @@ function hojaEnXlsx_() {
 }
 
 // Apunta hoy el precio de cada fondo de «Índices» que tenga su precio en Cartera (los que no son fórmulas de Google Finance).
+// v3: solo en los bloques con la nota «Precio del fondo» encima (nunca en los de los ETF de Google Finance, aunque un fondo
+// de Cartera se llame igual que el índice), y con el día de la zona horaria de la hoja (no la del script).
 function apuntarPrecios() {
-  const hoy = new Date(), dia = hoy.getDay();
-  if (dia === 0 || dia === 6) return;                     // los fondos no publican precio en fin de semana
-  const fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-  const libro = SpreadsheetApp.openById(HOJA_ID), ind = libro.getSheetByName(PESTANA_INDICES), car = libro.getSheetByName('Cartera');
+  const libro = SpreadsheetApp.openById(HOJA_ID), tz = libro.getSpreadsheetTimeZone(), hoy = new Date();
+  if (Number(Utilities.formatDate(hoy, tz, 'u')) >= 6) return;          // sábado o domingo: los fondos no publican precio
+  const dia = Utilities.formatDate(hoy, tz, 'yyyy-MM-dd');
+  const ind = libro.getSheetByName(PESTANA_INDICES), car = libro.getSheetByName('Cartera');
   if (!ind || !car) throw new Error('Faltan las pestañas «' + PESTANA_INDICES + '» o «Cartera»');
   // precios de Cartera: fila de títulos con «Precio»; en cada fila, el nombre del fondo está en alguna de sus celdas
   const C = car.getDataRange().getValues();
@@ -45,20 +47,22 @@ function apuntarPrecios() {
   for (let r = 0; r < Math.min(C.length, 12) && hp < 0; r++) { const c = C[r].indexOf('Precio'); if (c >= 0) { hp = r; cp = c; } }
   if (hp < 0) throw new Error('No encuentro la columna «Precio» en Cartera');
   const precioDe = nombre => { for (let r = hp + 1; r < C.length; r++) if (C[r].some(v => String(v).trim() === nombre)) { const p = C[r][cp]; return typeof p === 'number' && p > 0 ? p : null; } return null; };
-  // bloques de Índices: «Fecha» y, a su derecha, el nombre del fondo
+  // bloques de Índices: «Fecha» y, a su derecha, el nombre del fondo; encima (fila 1), la nota «Precio del fondo…»
   const I = ind.getRange(1, 1, Math.min(ind.getLastRow(), 12), ind.getLastColumn()).getValues();
   let hi = -1; for (let r = 0; r < I.length && hi < 0; r++) if (I[r].indexOf('Fecha') >= 0) hi = r;
   if (hi < 0) throw new Error('No encuentro la fila de títulos de «' + PESTANA_INDICES + '»');
   I[hi].forEach((v, c) => {
     if (v !== 'Fecha') return;
+    const nota = I.slice(0, hi).map(f => String(f[c] || '') + ' ' + String(f[c + 1] || '')).join(' ');
+    if (!/precio del fondo/i.test(nota)) return;                              // bloque de un ETF (Google Finance): no se toca
     const nombre = String(I[hi][c + 1] || '').trim(), precio = nombre ? precioDe(nombre) : null;
-    if (precio == null) return;                                               // sin precio en Cartera (p. ej. los MSCI)
+    if (precio == null) return;
     const col = ind.getRange(hi + 2, c + 1, ind.getMaxRows() - hi - 1, 1).getValues();
     let n = col.findIndex(x => x[0] === '' || x[0] === null); if (n < 0) n = col.length;
     const ultima = n > 0 ? col[n - 1][0] : null;
-    if (ultima instanceof Date && ultima >= fecha) return;                     // hoy ya está apuntado
+    if (ultima instanceof Date && Utilities.formatDate(ultima, tz, 'yyyy-MM-dd') >= dia) return;   // hoy ya está apuntado
     if (n >= col.length) ind.insertRowsAfter(ind.getMaxRows(), 500);
-    ind.getRange(hi + 2 + n, c + 1, 1, 2).setValues([[fecha, precio]]);
+    ind.getRange(hi + 2 + n, c + 1, 1, 2).setValues([[dia, precio]]);
   });
 }
 
